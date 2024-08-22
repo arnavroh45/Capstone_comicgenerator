@@ -3,6 +3,9 @@ const bodyParser = require("body-parser");
 const { connectToDb, getDb } = require("./db");
 
 const app = express();
+const cors = require('cors');
+
+app.use(cors());
 
 // Middleware setup
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -25,20 +28,13 @@ connectToDb((err) => {
 // Sign-up route
 app.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
-  let msg = '';
-
-  console.log("Name:", name);
-  console.log("Email:", email);
-  console.log("Password:", password);
-  
 
   try {
     // Check if user already exists
-    const existingUser = await db.collection("Registration").findOne({email});
+    const existingUser = await db.collection("Registration").findOne({ email });
 
     if (existingUser) {
-      msg = "User already exists. Please, login";
-      return res.status(400).send(msg);
+      return res.status(400).send("User already exists. Please, login");
     }
 
     // Insert new user
@@ -47,14 +43,15 @@ app.post('/signup', async (req, res) => {
       email: email,
       password: password
     });
+    console.log("Success");
 
     res.status(200).send("Sign-up successful");
   } catch (error) {
-    msg = "Error during signup. Please try again.";
     console.error("Error during signup:", error);
-    res.status(500).send(msg);
+    res.status(500).send("Error during signup. Please try again.");
   }
 });
+
 
 app.listen(3001, () => {
   console.log("Server started");
