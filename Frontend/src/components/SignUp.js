@@ -25,6 +25,7 @@ const SignUp = () => {
       if (response.ok) {
         navigate('/main'); // Navigate to the main page on success
       } else {
+        alert("Add correct details.User already exists!!");
         console.error('Sign-up failed with status:', response.status);
         const errorText = await response.text();
         console.error('Error message:', errorText);
