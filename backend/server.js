@@ -34,7 +34,12 @@ app.post('/signup', async (req, res) => {
     const existingUser = await db.collection("Registration").findOne({ email });
 
     if (existingUser) {
-      return res.status(400).send("User already exists. Please, login");
+      // If user exists, check if the password is correct
+      if (existingUser.password === password) {
+        return res.status(200).send("Sign-up successful");
+      } else {
+        return res.status(401).send("User exists but the password is incorrect.");
+      }
     }
 
     // Insert new user
@@ -51,6 +56,7 @@ app.post('/signup', async (req, res) => {
     res.status(500).send("Error during signup. Please try again.");
   }
 });
+
 
 
 app.listen(3001, () => {

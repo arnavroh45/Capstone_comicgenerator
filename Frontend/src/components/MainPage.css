@@ -61,6 +61,7 @@
   padding: 15px 30px;
   border-radius: 5px;
   cursor: pointer;
+  height: 60px;
 }
 
 .mainpage-auth-buttons .mainpage-auth-button {

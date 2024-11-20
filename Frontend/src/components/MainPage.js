@@ -23,7 +23,7 @@ const MainPage = () => {
           <button className="mainpage-generate-button">Generate</button>
         </div>
         <div className="mainpage-auth-buttons">
-          <button className="mainpage-auth-button">Sign Up/Sign In</button>
+          {/* <button className="mainpage-auth-button">Sign Up/Sign In</button> */}
         </div>
       </header>
 
