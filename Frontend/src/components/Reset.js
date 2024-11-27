@@ -3,17 +3,17 @@ import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import background from '../assets/background.png';
 
-const Login = () => {
+const Reset = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
-  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [repassword, setRePassword] = useState('');
   const [step, setStep] = useState(1);
 
   const handleSendOtp = async () => {
     try {
-      const response = await fetch('http://localhost:3001/send-email-otp', {
+      const response = await fetch('http://localhost:3001/reset-send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ const Login = () => {
 
   const handleVerifyOtp = async () => {
     try {
-      const response = await fetch('http://localhost:3001/verify-email-otp', {
+      const response = await fetch('http://localhost:3001/reset-verify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,14 +54,14 @@ const Login = () => {
     }
   };
 
-  const handleRegister = async () => {
+  const handleReset = async () => {
     try {
-      const response = await fetch('http://localhost:3001/register', {
+      const response = await fetch('http://localhost:3001/reset', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, name, password }),
+        body: JSON.stringify({ email, password,repassword}),
       });
 
       if (response.ok) {
@@ -129,20 +129,20 @@ const Login = () => {
           )}
           {step === 3 && (
             <div>
-            <h2>Create your account</h2>
-            <form onSubmit={handleRegister}>
-              <label>
+            <h2>Enter your new password</h2>
+            <form onSubmit={handleReset}>
+                <label>
                 Email
                 <input type="email" value={email} readOnly />
               </label>
               <label>
-                Name
+                Password
                 <input
-                  type="text"
-                  name="name"
-                  placeholder="Enter your name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  type="password"
+                  name="password"
+                  placeholder="Enter your new password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </label>
@@ -150,15 +150,15 @@ const Login = () => {
                 Password
                 <input
                   type="password"
-                  name="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  name="repassword"
+                  placeholder="Enter your password again"
+                  value={repassword}
+                  onChange={(e) => setRePassword(e.target.value)}
                   required
                 />
               </label>
               <button type="submit" className="signup-button">
-                Register
+                Reset
               </button>
             </form>
             </div>
@@ -169,4 +169,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Reset;

@@ -57,6 +57,9 @@ const SignUp = () => {
               Password
               <input type="password" name="password" placeholder="Enter your password" required />
             </label>
+            <label>
+                <a href='http://localhost:3002/Reset'>Forgot Password</a>
+            </label>
             <button type="submit" className="signup-button">Sign Up</button>
           </form>
         </div>

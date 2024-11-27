@@ -5,6 +5,7 @@ import MainPage from './components/MainPage';
 import PublishPage from './components/PublishPage'; // Import PublishPage
 import Home from './components/Home';
 import Login from './components/Login';
+import Reset  from './components/Reset';
 function App() {
   return (
     <Router>
@@ -13,6 +14,7 @@ function App() {
         <Route path="/Signup" element={<SignUp />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/main" element={<MainPage />} />
+        <Route path="/Reset" element={<Reset />} />
         <Route path="/publish" element={<PublishPage />} /> {/* Route for PublishPage */}
       </Routes>
     </Router>
