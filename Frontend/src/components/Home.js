@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css'; // Create a CSS file to style the Home page
 import background from '../assets/background.png'; // Replace with your own image if needed
-
+import Footer from './Footer';
 const Home = () => {
   const navigate = useNavigate();
 
@@ -13,21 +13,15 @@ const Home = () => {
         <p>Unleash creativity with AI-powered comics</p>
       </div>
       <div className="options-section">
-        <div className="button-container">
-          <button 
-            className="home-button" 
-            onClick={() => navigate('/Login')}
-          >
-            Login
-          </button>
-          <button 
-            className="home-button" 
-            onClick={() => navigate('/Signup')}
-          >
-            Sign Up
-          </button>
-        </div>
+      <h2>Join Comic Gen Today!</h2>
+      <p>Log in to continue your adventures or sign up to start creating AI-powered comics.</p>
+      <div className="button-container">
+        <button className="home-button" onClick={() => navigate('/Login')}>Login</button>
+        <button className="home-button" onClick={() => navigate('/Signup')}>Sign Up</button>
       </div>
+      <hr />
+    </div>
+    <Footer />
     </div>
   );
 };

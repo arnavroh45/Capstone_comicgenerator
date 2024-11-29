@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import background from '../assets/background.png';
-
+import Footer from './Footer';
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -165,6 +165,7 @@ const Login = () => {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -1,58 +1,105 @@
 .home-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-  }
-  
-  .hero-section {
-    width: 100%;
-    height: 60%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-size: cover;
-    background-position: center;
-    color: #fff;
-    text-align: center;
-  }
-  
-  .hero-section h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-  }
-  
-  .hero-section p {
-    font-size: 1.5rem;
-  }
-  
-  .options-section {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 2rem;
-  }
-  
-  .button-container {
-    display: flex;
-    gap: 2rem;
-  }
-  
-  .home-button {
-    padding: 1rem 2rem;
-    font-size: 1.2rem;
-    color: #fff;
-    background-color:#f0a500;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .home-button:hover {
-    background-color: #0056b3;
-  }
-  
+  display: flex; /* Row-based layout */
+  flex-direction: row;
+  height: 90vh;
+  font-family: Arial, sans-serif;
+}
+
+.hero-section {
+  flex: 2; /* Occupies majority of the screen */
+  height: 100%; /* Full height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  text-align: center;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero-section p {
+  font-size: 1.5rem;
+}
+
+.options-section {
+  flex: 1; /* Smaller section for buttons */
+  height: 100%; /* Full height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f4f4f4; /* Optional: Adjust as needed */
+  padding: 2rem;
+}
+
+.button-container {
+  display: flex; /* Align buttons in a single row */
+  gap: 2rem; /* Space between buttons */
+}
+
+.home-button {
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: #f0a500;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.home-button:hover {
+  background-color: #d48a00; /* Adjust hover color */
+}
+.options-section {
+  flex: 1; /* Smaller section on the right */
+  height: 100%;
+  display: flex;
+  flex-direction: column; /* Stack text and buttons */
+  justify-content: center;
+  align-items: center;
+  background-color: #fff; /* Optional: Adjust for better contrast */
+  padding: 2rem;
+}
+
+.button-container {
+  display: flex;
+  gap: 1.5rem; /* Space between buttons */
+  margin-top: 1.5rem; /* Space below the text */
+}
+
+.options-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+  text-align: center;
+}
+
+.options-section p {
+  font-size: 1.2rem;
+  color: #555;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.home-button {
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: #f0a500;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  min-width: 120px; /* Ensure consistent button width */
+  text-align: center;
+}
+
+.home-button:hover {
+  background-color: #d48a00;
+}

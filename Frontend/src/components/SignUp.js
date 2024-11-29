@@ -2,7 +2,7 @@ import React from 'react';
 import './SignUp.css';
 import { useNavigate } from 'react-router-dom';
 import background from '../assets/background.png'; // Ensure the path is correct
-
+import Footer from './Footer';
 const SignUp = () => {
   const navigate = useNavigate();
 
@@ -64,6 +64,7 @@ const SignUp = () => {
           </form>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
