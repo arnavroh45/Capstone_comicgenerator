@@ -2,7 +2,7 @@ import React from 'react';
 import './SignUp.css';
 import { useNavigate } from 'react-router-dom';
 import background from '../assets/background.png'; // Ensure the path is correct
-import Footer from './Footer';
+
 const SignUp = () => {
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ const SignUp = () => {
       });
 
       if (response.ok) {
-        navigate('/main'); // Navigate to the main page on success
+        navigate('/Dashboard'); // Navigate to the main page on success
       } else {
         alert("Add correct details.User already exists!!");
         console.error('Sign-up failed with status:', response.status);
@@ -43,28 +43,29 @@ const SignUp = () => {
       </div>
       <div className="form-section">
         <div className="form-container">
-          <h2>Enter your details</h2>
-          <form onSubmit={handleSignUp}>
+        <h2 style={{color: "black" }}>Enter your details</h2>
+        <form onSubmit={handleSignUp}>
+
             <label>
               Name
-              <input type="text" name="name" placeholder="Enter your name" required />
+              <input type="text" id="name" name="name" placeholder="Enter your name" required />
             </label>
             <label>
               Email address
-              <input type="email" name="email" placeholder="Enter your email address" required />
+              <input type="email" id="email" name="email" placeholder="Enter your email address" required />
             </label>
             <label>
               Password
-              <input type="password" name="password" placeholder="Enter your password" required />
+              <input type="password" id="password" name="password" placeholder="Enter your password" required />
             </label>
             <label>
                 <a href='http://localhost:3002/Reset'>Forgot Password</a>
             </label>
-            <button type="submit" className="signup-button">Sign Up</button>
+            <button id="signup" type="submit" className="signup-button">Sign Up</button>
           </form>
         </div>
       </div>
-      <Footer />
+    
     </div>
   );
 };

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import background from '../assets/background.png';
-import Footer from './Footer';
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -66,7 +65,7 @@ const Login = () => {
 
       if (response.ok) {
         alert('Registration successful!');
-        navigate('/main'); 
+        navigate('/ Dashboard'); 
       } else {
         const errorText = await response.text();
         alert('Failed to register: ' + errorText);
@@ -84,7 +83,8 @@ const Login = () => {
       </div>
       <div className="form-section">
         <div className="form-container">
-          <h2>
+        <h1 style={{ color: "black" }}>Enter your details</h1>
+          <h2 style={{marginTop:"-30px"}}>
             {step === 1
               ? 'Enter Your Email'
               : step === 2
@@ -165,7 +165,7 @@ const Login = () => {
           )}
         </div>
       </div>
-      <Footer />
+    
     </div>
   );
 };

@@ -66,7 +66,7 @@ const Reset = () => {
 
       if (response.ok) {
         alert('Registration successful!');
-        navigate('/main'); 
+        navigate('/Dashboard'); 
       } else {
         const errorText = await response.text();
         alert('Failed to register: ' + errorText);

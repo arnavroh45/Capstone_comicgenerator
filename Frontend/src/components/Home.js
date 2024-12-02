@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css'; // Create a CSS file to style the Home page
 import background from '../assets/background.png'; // Replace with your own image if needed
-import Footer from './Footer';
 const Home = () => {
   const navigate = useNavigate();
 
@@ -21,7 +20,7 @@ const Home = () => {
       </div>
       <hr />
     </div>
-    <Footer />
+    
     </div>
   );
 };
