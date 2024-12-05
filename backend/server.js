@@ -36,7 +36,7 @@ const transporter = nodemailer.createTransport({
 app.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
   try {
-    const existingUser = await db.collection("Registration").findOne({ email });
+    const existingUser = await db.collection("Registration").findOne({email:email,user_name:name });
     if (existingUser) {
       if (existingUser.password === password) {
         return res.status(200).send("Sign-up successful");

@@ -17,7 +17,7 @@ const Login = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({email}),
       });
 
       if (response.ok) {
@@ -65,7 +65,7 @@ const Login = () => {
 
       if (response.ok) {
         alert('Registration successful!');
-        navigate('/ Dashboard'); 
+        navigate('/Dashboard'); 
       } else {
         const errorText = await response.text();
         alert('Failed to register: ' + errorText);

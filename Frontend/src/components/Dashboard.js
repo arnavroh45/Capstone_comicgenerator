@@ -10,13 +10,11 @@ function DashboardPage() {
     navigate("/publish");
   };
 
-  
-
   return (
     <div className="dashboard">
       {/* Header Section */}
       <header className="dashboard-header">
-        <div className="logo">AI ComicGen</div>
+        <div id="naam" className="logo">AI ComicGen</div>
         <nav className="navigation">
           <a href="/">Home</a>
           <a href="/comics">Comics</a>
@@ -26,7 +24,7 @@ function DashboardPage() {
           
           <input type="search" placeholder="Search" />
 
-          <button className="btn-publish" onClick={handlePublishClick}>
+          <button id="publish" className="btn-publish" onClick={handlePublishClick}>
             Publish
           </button>
         </nav>
@@ -34,18 +32,18 @@ function DashboardPage() {
 
       {/* New Tab Section */}
       <div className="tabs-section">
-        <button className="tab-button">Spotlight</button>
-        <button className="tab-button">Daily</button>
-        <button className="tab-button">Free Access</button>
-        <button className="tab-button">New</button>
-        <button className="tab-button">Popular</button>
-        <button className="tab-button">Completed</button>
+        <button id="spotlight" className="tab-button">Spotlight</button>
+        <button id="daily" className="tab-button">Daily</button>
+        <button id="free" className="tab-button">Free Access</button>
+        <button id="new" className="tab-button">New</button>
+        <button id="popular" className="tab-button">Popular</button>
+        <button id="completed" className="tab-button">Completed</button>
       </div>
 
       <div className="spotlight">
         {/* Vote Now Button */}
         <div className="vote-now">
-          <button>VOTE NOW</button>
+          <button id="vote">VOTE NOW</button>
         </div>
 
         {/* Comic Highlight Section */}
