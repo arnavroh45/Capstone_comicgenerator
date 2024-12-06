@@ -93,6 +93,7 @@ app.post('/verify-email-otp', (req, res) => {
 });
 app.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
+  const uid=name+email;
   try {
     const existingUser = await db.collection("Registration").findOne({ email });
     if (existingUser) {
@@ -105,7 +106,8 @@ app.post('/register', async (req, res) => {
     await db.collection("Registration").insertOne({
       user_name: name,
       email: email,
-      password: password
+      password: password,
+      uid:uid
     });
     console.log("Success");
     res.status(200).send("Sign-up successful");
