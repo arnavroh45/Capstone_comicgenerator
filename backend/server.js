@@ -222,6 +222,16 @@ app.post("/publish",async (req,res)=>{
     console.log(title);
     console.log(description);
 });
+app.get('/comics', async (req, res) => {
+  try {
+      const comicsData = await db.collection('Comics').find({}).toArray();
+      return res.status(200).send({ message: 'Success', comics: comicsData });
+  } catch (error) {
+      console.error('Error fetching comics:', error);
+      return res.status(500).send({ message: 'Failed to fetch comics', error: error.message });
+  }
+});
+
 
 app.listen(3001, () => {
   console.log("Server started");
