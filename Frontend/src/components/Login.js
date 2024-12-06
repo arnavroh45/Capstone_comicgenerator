@@ -53,7 +53,8 @@ const Login = () => {
     }
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async (e) => {
+    e.preventDefault(); 
     try {
       const response = await fetch('http://localhost:3001/register', {
         method: 'POST',
@@ -64,8 +65,10 @@ const Login = () => {
       });
 
       if (response.ok) {
+
         alert('Registration successful!');
-        navigate('/Dashboard'); 
+        console.log('Navigating to dashboard...');
+        navigate('/signup'); 
       } else {
         const errorText = await response.text();
         alert('Failed to register: ' + errorText);

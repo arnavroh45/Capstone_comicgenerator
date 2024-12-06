@@ -4,11 +4,14 @@ const bodyParser = require("body-parser");
 const { connectToDb, getDb } = require("./db");
 const nodemailer = require('nodemailer');
 const app = express();
+app.set('view engine', 'ejs');
 const cors = require('cors');
-
-app.use(cors());
+const jwt=require('jsonwebtoken');
+app.use(express.urlencoded({ extended: true }));
+app.use(cors({credentials:true}));
 let db;
-
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 connectToDb((err) => {
   if (!err) {
     db = getDb();
@@ -22,7 +25,7 @@ connectToDb((err) => {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); 
 let otpData = {}; 
-
+const key="Capstone@16";
 const transporter = nodemailer.createTransport({
   service: 'gmail', 
   auth: {
@@ -33,22 +36,47 @@ const transporter = nodemailer.createTransport({
 });
 
 
+
 app.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
+
   try {
-    const existingUser = await db.collection("Registration").findOne({email:email,user_name:name });
-    if (existingUser) {
-      if (existingUser.password === password) {
-        return res.status(200).send("Sign-up successful");
-      } else {
-        return res.status(401).send("User exists but the password is incorrect.");
-      }
+    // Check if the user exists in the database by email and username
+    const existingUser = await db.collection("Registration").findOne({ email: email, user_name: name });
+
+    if (!existingUser) {
+      // If the user does not exist, send an error
+      return res.status(404).send("User does not exist.");
     }
+
+    // Check if the provided password matches the stored password
+    if (existingUser.password !== password) {
+      // If passwords do not match, send an error
+      return res.status(401).send("Invalid password.");
+    }
+
+    // Generate the JWT token after successful verification of user credentials
+    jwt.sign({ user: existingUser }, key, { expiresIn: '3600s' }, (err, token) => {
+      if (err) {
+        return res.status(500).send("Error generating token.");
+      }
+      console.log(token);
+      
+      // Set the token in cookies
+      res.cookie('authToken', token, {
+        httpOnly: true,
+        maxAge: 3600000,
+      });
+
+      return res.status(200).json({ message: "Login successful", token });
+    });
   } catch (error) {
     console.error("Error during signup:", error);
     res.status(500).send("Error during signup. Please try again.");
   }
 });
+
+
 
 app.post('/send-email-otp', async (req, res) => {
   const { email } = req.body;
@@ -91,31 +119,36 @@ app.post('/verify-email-otp', (req, res) => {
   }
   res.status(400).send({ message: 'Invalid OTP' });
 });
+
 app.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
-  const uid=name+email;
+
+  // Generate a unique identifier
+  const uid = name + email;
+
   try {
-    const existingUser = await db.collection("Registration").findOne({ email });
+    // Check if the user already exists
+    const existingUser = await db.collection("Registration").findOne({ email: email, user_name: name });
     if (existingUser) {
-      if (existingUser.password === password) {
-        return res.status(200).send("Sign-up successful");
-      } else {
-        return res.status(401).send("User exists but the password is incorrect.");
-      }
+      return res.status(409).send("User already exists.");
     }
+
+    // Insert the new user into the database
     await db.collection("Registration").insertOne({
       user_name: name,
       email: email,
-      password: password,
-      uid:uid
+      password: password, 
+      uid: uid,
     });
-    console.log("Success");
-    res.status(200).send("Sign-up successful");
+
+    console.log("User registered successfully.");
+    return res.status(201).json({ message: "Sign-up successful" });
   } catch (error) {
-    console.error("Error during signup:", error);
-    res.status(500).send("Error during signup. Please try again.");
+    console.error("Error during registration:", error);
+    return res.status(500).send("Internal server error during registration.");
   }
 });
+
 app.post("/reset-send",async (req,res)=>{
   const { email } = req.body;
   if (!email) {
@@ -184,6 +217,11 @@ app.post('/reset', async (req, res) => {
   }
 });
 
+app.post("/publish",async (req,res)=>{
+    const {title,description}=req.body;
+    console.log(title);
+    console.log(description);
+});
 
 app.listen(3001, () => {
   console.log("Server started");

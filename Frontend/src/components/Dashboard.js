@@ -19,7 +19,7 @@ function DashboardPage() {
           <a href="/">Home</a>
           <a href="/comics">Comics</a>
           <a href="/novels">Novels</a>
-          <a href="/community">Community</a>
+          <a href="/Community">Community</a>
           <a href="/cultural">Cultural</a>
           
           <input type="search" placeholder="Search" />
