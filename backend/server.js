@@ -10,6 +10,8 @@ const jwt=require('jsonwebtoken');
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({credentials:true}));
 let db;
+let uname;
+let eid;
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 connectToDb((err) => {
@@ -39,7 +41,8 @@ const transporter = nodemailer.createTransport({
 
 app.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
-
+  uname=name;
+  eid=email;
   try {
     // Check if the user exists in the database by email and username
     const existingUser = await db.collection("Registration").findOne({ email: email, user_name: name });
@@ -232,6 +235,65 @@ app.get('/comics', async (req, res) => {
   }
 });
 
+app.get('/user_comics1',async(req,res)=>{
+  const uid=uname+eid;
+  try {
+    const comicsData = await db.collection('Comics').find({user_id:uid}).toArray();
+    return res.status(200).send({ message: 'Success', comics: comicsData });
+} catch (error) {
+    console.error('Error fetching comics:', error);
+    return res.status(500).send({ message: 'Failed to fetch comics', error: error.message });
+}
+});
+app.post('/vote', async (req, res) => {
+  console.log("Voting starts here");
+
+  try {
+      const { title, comicId, type } = req.body;
+      console.log(comicId);
+
+      const incrementValue = type === "Upvote" ? 1 : -1;
+
+      // Step 1: Initialize vote if it doesn't exist
+      await db.collection('Comics').updateOne(
+          { title: title, user_id: comicId, vote: { $exists: false } },
+          { $set: { vote: 0 } }
+      );
+
+      // Step 2: Increment or decrement the vote
+      const result = await db.collection('Comics').updateOne(
+          { title: title, user_id: comicId },
+          { $inc: { vote: incrementValue } }
+      );
+
+      // Step 3: Ensure vote is at least 0
+      if (result.modifiedCount > 0) {
+          await db.collection('Comics').updateOne(
+              { title: title, user_id: comicId, vote: { $lt: 0 } },
+              { $set: { vote: 0 } }
+          );
+          return res.status(200).send({ message: 'Vote updated successfully' });
+      } else {
+          return res.status(404).send({ message: 'Comic not found or no changes made' });
+      }
+  } catch (error) {
+      console.error('Error updating vote:', error);
+      return res.status(500).send({ message: 'Failed to update vote', error: error.message });
+  }
+});
+app.get('/popular', async (req, res) => {
+  try {
+      const popularComics = await db.collection('Comics').aggregate([
+          { $sort: { vote: -1 } },
+          { $limit: 5 }
+      ]).toArray();
+
+      return res.status(200).send({ message: 'Top 5 Popular Comics', comics: popularComics });
+  } catch (error) {
+      console.error('Error fetching popular comics:', error);
+      return res.status(500).send({ message: 'Failed to fetch popular comics', error: error.message });
+  }
+});
 
 app.listen(3001, () => {
   console.log("Server started");

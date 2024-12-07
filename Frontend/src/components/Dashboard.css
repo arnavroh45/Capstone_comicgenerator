@@ -12,9 +12,10 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 30px; /* Adjusted padding for better spacing */
+    padding: 12px 30px; /* Adjusted padding for better spacing */
     background-color: rgba(17, 15, 15, 0.8); /* Semi-transparent background */
     color: #fff;
+    /* padding-top: 18px; */
   }
   
   .dashboard-header .logo {

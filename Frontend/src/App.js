@@ -8,7 +8,9 @@ import Login from './components/Login';
 import Reset  from './components/Reset';
 import IntroPage from './components/Intro';
 import DashboardPage from './components/Dashboard';
-import Community from './components/Community';
+import Community from './components/community';
+import Comic from './components/Comics';
+import Popular from './components/popular';
 function App() {
   return (
     <Router>
@@ -20,8 +22,10 @@ function App() {
         <Route path="/Login" element={<Login />} />
         <Route path="/main" element={<MainPage />} />
         <Route path="/Reset" element={<Reset />} />
-        <Route path="/Community" element={<Community />} />
+        <Route path="/community" element={<Community />} />
+        <Route path="/user_comics" element={<Comic />} />
         <Route path="/publish" element={<PublishPage />} /> 
+        <Route path="/popular" element={<Popular />} /> 
       </Routes>
     </Router>
   );

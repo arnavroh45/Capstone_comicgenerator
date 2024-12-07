@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-const Community = () => {
+const Popular = () => {
     const [comics, setComics] = useState([]); 
     useEffect(() => {
         const fetchComics = async () => {
             try {
-                const response = await fetch('http://localhost:3000/comics');
+                const response = await fetch('http://localhost:3000/popular');
                 const comicsData = await response.json();
                 console.log('Fetched Comics Data:', comicsData); 
                 setComics(comicsData.comics); 
@@ -40,11 +40,9 @@ const Community = () => {
             console.error('Error sending vote request:', error);
         }
     };
-    
-
     return (
         <div>
-            <h1>Community</h1>
+            <h1>Trending Comics</h1>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
                 {Array.isArray(comics) && comics.map((comic) => (
                     <div
@@ -108,4 +106,4 @@ const Community = () => {
     );
 };
 
-export default Community;
+export default Popular;

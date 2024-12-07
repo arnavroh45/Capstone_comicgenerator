@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
-
+import Footer from './Footer';
 function DashboardPage() {
   const navigate = useNavigate();
 
@@ -14,36 +14,30 @@ function DashboardPage() {
     <div className="dashboard">
       {/* Header Section */}
       <header className="dashboard-header">
+    
         <div id="naam" className="logo">AI ComicGen</div>
         <nav className="navigation">
-          <a href="/">Home</a>
-          <a href="/comics">Comics</a>
-          <a href="/novels">Novels</a>
-          <a href="/Community">Community</a>
-          <a href="/cultural">Cultural</a>
-          
+          <a style={{paddingTop:"18px"}} href="/">Home</a>
+          <a style={{paddingTop:"18px"}} href="/user_comics">Comics</a>
+          <a style={{paddingTop:"18px"}} href="/novels">Novels</a>
+          <a style={{paddingTop:"18px"}} href="/community">Community</a>
+          <a style={{paddingTop:"18px"}} href="/cultural">Cultural</a>
+          <a style={{paddingTop:"18px"}} href="/popular">Popular</a>
+          <a style={{paddingTop:"18px"}} href="/new">New</a> 
           <input type="search" placeholder="Search" />
-
           <button id="publish" className="btn-publish" onClick={handlePublishClick}>
             Publish
           </button>
         </nav>
       </header>
 
-      {/* New Tab Section */}
-      <div className="tabs-section">
-        <button id="spotlight" className="tab-button">Spotlight</button>
-        <button id="daily" className="tab-button">Daily</button>
-        <button id="free" className="tab-button">Free Access</button>
-        <button id="new" className="tab-button">New</button>
-        <button id="popular" className="tab-button">Popular</button>
-        <button id="completed" className="tab-button">Completed</button>
-      </div>
+      
 
       <div className="spotlight">
         {/* Vote Now Button */}
         <div className="vote-now">
-          <button id="vote">VOTE NOW</button>
+          <button id="vote" onClick={() => navigate('/community')}>VOTE NOW</button>
+        
         </div>
 
         {/* Comic Highlight Section */}
@@ -53,32 +47,22 @@ function DashboardPage() {
             <h3>Comic Name</h3>
             <p>Comic description in a line</p>
             <div className="tags">
-              <span className="badge">EVENT</span>
               <span className="category">Comic - Fantasy</span>
             </div>
           </div>
 
           {/* Comic Cover Placeholder */}
-          <div className="comic-cover">yaha comic ka cover photo</div>
-        </div>
-
-        {/* Pagination Section */}
-        <div className="pagination">
-          <button className="arrow">&lt;</button>
-          <span>5 / 13</span>
-          <button className="arrow">&gt;</button>
-        </div>
-      </div>
-
-      {/* Comic Grid Section */}
-      <div className="comic-grid">
-        {[...Array(8)].map((_, index) => (
-          <div className="comic-card" key={index}>
-            <span className="badge">EVENT</span>
-            <div className="comic-thumbnail">comic name</div>
+          <div className="comic-cover">
+          <img 
+  src="http://res.cloudinary.com/dfntvlmqc/image/upload/v1733487153/CR7agam_be21%40thapar.edu_comic/Ramayana/panel_2.png" 
+  alt="Comic Panel 1" 
+  style={{ width: '400px', height: '400px', borderRadius: '8px' }} 
+/>
           </div>
-        ))}
+        </div>
+        
       </div>
+      <Footer />
     </div>
   );
 }
