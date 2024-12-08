@@ -26,6 +26,7 @@ from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends
 from pymongo import MongoClient
+from datetime import datetime
 
 # Importing your existing functions
 from add_text_to_panel import add_text_to_panel
@@ -141,7 +142,8 @@ async def generate_comic(request: ComicRequest, user: dict = Depends(verify_toke
             "scenario": request.scenario,
             "style": request.style,
             "images_links": image_links,
-            "strip_links": strip_links
+            "strip_links": strip_links,
+            "created_at": datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')  # Custom format
         }
         comics.insert_one(document)
 
