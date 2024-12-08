@@ -77,9 +77,6 @@ npm start
 ### 🌟 Explore and Create Comics!
 Open your browser and start generating exciting comics! 
 
-### 📞 Support
-For `.env` file configuration, please contact Arnav Sharma.
-
 ### 🛠 Troubleshooting
 - Ensure all prerequisites are installed
 - Verify virtual environment is activated
