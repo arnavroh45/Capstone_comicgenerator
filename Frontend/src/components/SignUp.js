@@ -2,6 +2,7 @@ import React from 'react';
 import './SignUp.css';
 import { useNavigate } from 'react-router-dom';
 import background from '../assets/background.png'; // Ensure the path is correct
+import axios from 'axios';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -14,15 +15,18 @@ const SignUp = () => {
     const urlEncodedData = new URLSearchParams(formDataObj);
 
     try {
-      const response = await fetch('http://localhost:3001/signup', { // Ensure the correct port is used
-        method: 'POST',
+      const response = await axios.post('http://localhost:3001/signup', urlEncodedData, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: urlEncodedData.toString(),
       });
+      console.log(response);
 
-      if (response.ok) {
+      if (response.status === 200) {
+
+        console.log(response.data)
+        localStorage.setItem('token', response.data.token)
+
         navigate('/Dashboard'); // Navigate to the main page on success
       } else {
         alert("Add correct details.User already exists!!");

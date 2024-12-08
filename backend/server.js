@@ -59,19 +59,21 @@ app.post('/signup', async (req, res) => {
     }
 
     // Generate the JWT token after successful verification of user credentials
-    jwt.sign({ user: existingUser }, key, { expiresIn: '3600s' }, (err, token) => {
-      if (err) {
-        return res.status(500).send("Error generating token.");
-      }
-      console.log(token);
-      
-      // Set the token in cookies
-      res.cookie('authToken', token, {
-        httpOnly: true,
-        maxAge: 3600000,
-      });
+    function generateJwt(user_email, user_name, expiresDelta = 7) {
+      const payload = {
+        email: user_email,
+        name: user_name,
+        exp: Math.floor(Date.now() / 1000) + expiresDelta * 24 * 60 * 60,
+        iat: Math.floor(Date.now() / 1000),
+      };
 
-      return res.status(200).json({ message: "Login successful", token });
+      return jwt.sign(payload, key, { algorithm: 'HS256' });
+    }
+
+    const token = generateJwt(existingUser.email, existingUser.user_name);
+    return res.status(200).json({
+      message: "Login successful",
+      token,
     });
   } catch (error) {
     console.error("Error during signup:", error);

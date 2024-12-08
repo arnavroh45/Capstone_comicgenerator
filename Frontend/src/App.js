@@ -8,7 +8,7 @@ import Login from './components/Login';
 import Reset  from './components/Reset';
 import IntroPage from './components/Intro';
 import DashboardPage from './components/Dashboard';
-import Community from './components/community';
+import Community from './components/Community';
 import Comic from './components/Comics';
 import Popular from './components/popular';
 function App() {

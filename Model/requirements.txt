@@ -1,0 +1,10 @@
+stability_sdk
+gradio_client
+diffusers
+transformers
+fastapi
+uvicorn
+python-dotenv
+PyJWT
+cloudinary
+pymongo
