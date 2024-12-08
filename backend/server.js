@@ -10,8 +10,7 @@ const jwt=require('jsonwebtoken');
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({credentials:true}));
 let db;
-let uname;
-let eid;
+
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 connectToDb((err) => {
@@ -41,8 +40,7 @@ const transporter = nodemailer.createTransport({
 
 app.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
-  uname=name;
-  eid=email;
+  
   try {
     // Check if the user exists in the database by email and username
     const existingUser = await db.collection("Registration").findOne({ email: email, user_name: name });
@@ -194,9 +192,7 @@ app.post('/reset-verify', (req, res) => {
 
 app.post('/reset', async (req, res) => {
   const { email, password, repassword } = req.body;
-  console.log(email);
-  console.log(password);
-  console.log(repassword);  
+  
   if (!email || !password || !repassword) {
     return res.status(400).send({ message: 'All fields are required!' });
   }
@@ -238,6 +234,13 @@ app.get('/comics', async (req, res) => {
 });
 
 app.get('/user_comics1',async(req,res)=>{
+  const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).send({ message: 'Authorization header missing' });
+    }
+  const token = authHeader.split(' ')[1];
+  const uname=(jwt.decode(token).name);
+  const eid=(jwt.decode(token).email);
   const uid=uname+eid;
   try {
     const comicsData = await db.collection('Comics').find({user_id:uid}).toArray();
@@ -248,27 +251,19 @@ app.get('/user_comics1',async(req,res)=>{
 }
 });
 app.post('/vote', async (req, res) => {
-  console.log("Voting starts here");
-
   try {
       const { title, comicId, type } = req.body;
-      console.log(comicId);
-
       const incrementValue = type === "Upvote" ? 1 : -1;
-
-      // Step 1: Initialize vote if it doesn't exist
       await db.collection('Comics').updateOne(
           { title: title, user_id: comicId, vote: { $exists: false } },
           { $set: { vote: 0 } }
       );
-
-      // Step 2: Increment or decrement the vote
       const result = await db.collection('Comics').updateOne(
           { title: title, user_id: comicId },
           { $inc: { vote: incrementValue } }
       );
 
-      // Step 3: Ensure vote is at least 0
+      
       if (result.modifiedCount > 0) {
           await db.collection('Comics').updateOne(
               { title: title, user_id: comicId, vote: { $lt: 0 } },

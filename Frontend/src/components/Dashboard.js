@@ -21,7 +21,7 @@ function DashboardPage() {
           <a style={{paddingTop:"18px"}} href="/user_comics">Comics</a>
           <a style={{paddingTop:"18px"}} href="/novels">Novels</a>
           <a style={{paddingTop:"18px"}} href="/community">Community</a>
-          <a style={{paddingTop:"18px"}} href="/cultural">Cultural</a>
+          <a style={{paddingTop:"18px"}} href="/liked">Liked</a>
           <a style={{paddingTop:"18px"}} href="/popular">Popular</a>
           <a style={{paddingTop:"18px"}} href="/new">New</a> 
           <input type="search" placeholder="Search" />
@@ -44,8 +44,8 @@ function DashboardPage() {
         <div className="comic-highlight">
           {/* Comic Info */}
           <div className="comic-info">
-            <h3>Comic Name</h3>
-            <p>Comic description in a line</p>
+            <h3>Mirza and Sahiba</h3>
+            <p>A series of visually rich and emotional comic panels that capture the poignant love story of Mirza and Sahiba, focusing on key moments of their journey</p>
             <div className="tags">
               <span className="category">Comic - Fantasy</span>
             </div>
@@ -54,7 +54,7 @@ function DashboardPage() {
           {/* Comic Cover Placeholder */}
           <div className="comic-cover">
           <img 
-  src="http://res.cloudinary.com/dfntvlmqc/image/upload/v1733487153/CR7agam_be21%40thapar.edu_comic/Ramayana/panel_2.png" 
+  src="https://res.cloudinary.com/dfntvlmqc/image/upload/v1733677566/Sahiba_born_in_a_rich_family_htyhnz.png" 
   alt="Comic Panel 1" 
   style={{ width: '400px', height: '400px', borderRadius: '8px' }} 
 />
