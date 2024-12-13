@@ -25,6 +25,7 @@ const Community = () => {
             const response = await fetch('http://localhost:3000/vote', {
                 method: 'POST',
                 headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // Add token to the Authorization header
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ title, comicId, type }),

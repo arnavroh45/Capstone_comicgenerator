@@ -251,33 +251,52 @@ app.get('/user_comics1',async(req,res)=>{
 }
 });
 app.post('/vote', async (req, res) => {
+  const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).send({ message: 'Authorization header missing' });
+    }
+  const token = authHeader.split(' ')[1];
+  const uname=(jwt.decode(token).name);
+  const eid=(jwt.decode(token).email);
+  const comicId=uname+eid;
   try {
-      const { title, comicId, type } = req.body;
+      const { title,type } = req.body;
+      console.log(title);
+      console.log(comicId);
+
       const incrementValue = type === "Upvote" ? 1 : -1;
-      await db.collection('Comics').updateOne(
-          { title: title, user_id: comicId, vote: { $exists: false } },
-          { $set: { vote: 0 } }
-      );
-      const result = await db.collection('Comics').updateOne(
-          { title: title, user_id: comicId },
-          { $inc: { vote: incrementValue } }
+      const pushField = type === "Upvote" ? "likes" : "dislikes";
+      const pullField = type === "Upvote" ? "dislikes" : "likes";
+
+      // Ensure the comic exists and fields are initialized
+      const initializationResult = await db.collection('Comics').updateOne(
+          { title },
+          { $setOnInsert: { vote: 0, likes: [], dislikes: [] } },
+          { upsert: true }
       );
 
-      
-      if (result.modifiedCount > 0) {
-          await db.collection('Comics').updateOne(
-              { title: title, user_id: comicId, vote: { $lt: 0 } },
-              { $set: { vote: 0 } }
-          );
-          return res.status(200).send({ message: 'Vote updated successfully' });
-      } else {
-          return res.status(404).send({ message: 'Comic not found or no changes made' });
+      // Perform the update
+      const updateResult = await db.collection('Comics').updateOne(
+          { title},
+          {
+              $inc: { vote: incrementValue },
+              $addToSet: { [pushField]: comicId }, // Add to likes/dislikes if not already present
+              $pull: { [pullField]: comicId } // Remove from the opposite field
+          }
+      );
+
+      if (updateResult.modifiedCount > 0) {
+          return res.status(200).send({ message: `${type} processed successfully` });
       }
+
+      return res.status(404).send({ message: 'Comic not found or no changes made' });
   } catch (error) {
       console.error('Error updating vote:', error);
       return res.status(500).send({ message: 'Failed to update vote', error: error.message });
   }
 });
+
+
 app.get('/popular', async (req, res) => {
   try {
       const popularComics = await db.collection('Comics').aggregate([
@@ -289,6 +308,36 @@ app.get('/popular', async (req, res) => {
   } catch (error) {
       console.error('Error fetching popular comics:', error);
       return res.status(500).send({ message: 'Failed to fetch popular comics', error: error.message });
+  }
+});
+app.get('/liked', async (req, res) => {
+  const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).send({ message: 'Authorization header missing' });
+    }
+  const token = authHeader.split(' ')[1];
+  const uname=(jwt.decode(token).name);
+  const eid=(jwt.decode(token).email);
+  const comicId=uname+eid;
+  try {
+      console.log(comicId);
+      
+      if (!comicId) {
+          return res.status(400).send({ message: 'Comic ID is required' });
+      }
+      
+      
+      const likedComics = await db.collection('Comics').find({ likes: comicId }).toArray();
+      console.log(likedComics);
+      
+      if (likedComics.length > 0) {
+          return res.status(200).send({ comics: likedComics });
+      } else {
+          return res.status(404).send({ message: 'No comics found liked by the given user' });
+      }
+  } catch (error) {
+      console.error('Error fetching liked comics:', error);
+      return res.status(500).send({ message: 'Failed to fetch liked comics', error: error.message });
   }
 });
 

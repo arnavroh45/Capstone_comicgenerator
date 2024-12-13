@@ -19,7 +19,6 @@ function DashboardPage() {
         <nav className="navigation">
           <a style={{paddingTop:"18px"}} href="/">Home</a>
           <a style={{paddingTop:"18px"}} href="/user_comics">Comics</a>
-          <a style={{paddingTop:"18px"}} href="/novels">Novels</a>
           <a style={{paddingTop:"18px"}} href="/community">Community</a>
           <a style={{paddingTop:"18px"}} href="/liked">Liked</a>
           <a style={{paddingTop:"18px"}} href="/popular">Popular</a>
