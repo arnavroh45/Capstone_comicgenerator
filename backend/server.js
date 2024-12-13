@@ -88,7 +88,7 @@ app.post('/send-email-otp', async (req, res) => {
   }
   const existingUser = await db.collection("Registration").findOne({ email });
   if (existingUser) {
-      console.log("already exits");
+    
       return res.status(400).send("User already exists, please signup");
   }else
   {
@@ -144,7 +144,7 @@ app.post('/register', async (req, res) => {
       uid: uid,
     });
 
-    console.log("User registered successfully.");
+   
     return res.status(201).json({ message: "Sign-up successful" });
   } catch (error) {
     console.error("Error during registration:", error);
@@ -220,8 +220,7 @@ app.post('/reset', async (req, res) => {
 
 app.post("/publish",async (req,res)=>{
     const {title,description}=req.body;
-    console.log(title);
-    console.log(description);
+ 
 });
 app.get('/comics', async (req, res) => {
   try {
@@ -261,8 +260,6 @@ app.post('/vote', async (req, res) => {
   const comicId=uname+eid;
   try {
       const { title,type } = req.body;
-      console.log(title);
-      console.log(comicId);
 
       const incrementValue = type === "Upvote" ? 1 : -1;
       const pushField = type === "Upvote" ? "likes" : "dislikes";
@@ -320,7 +317,7 @@ app.get('/liked', async (req, res) => {
   const eid=(jwt.decode(token).email);
   const comicId=uname+eid;
   try {
-      console.log(comicId);
+  
       
       if (!comicId) {
           return res.status(400).send({ message: 'Comic ID is required' });
@@ -328,7 +325,7 @@ app.get('/liked', async (req, res) => {
       
       
       const likedComics = await db.collection('Comics').find({ likes: comicId }).toArray();
-      console.log(likedComics);
+
       
       if (likedComics.length > 0) {
           return res.status(200).send({ comics: likedComics });

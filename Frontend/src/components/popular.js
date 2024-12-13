@@ -40,7 +40,6 @@ const Popular = () => {
             console.error('Error sending vote request:', error);
         }
     };
-
     return (
         <div>
             <h1 style={{ textAlign: 'center' }}>Trending Comics</h1>
