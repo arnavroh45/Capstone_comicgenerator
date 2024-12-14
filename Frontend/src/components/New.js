@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-const Liked = () => {
+const New = () => {
     const [comics, setComics] = useState([]);
     useEffect(() => {
         const fetchComics = async (comicId) => {
             try {
-                const response = await fetch('http://localhost:3000/liked',{
-                    method: 'GET', // or 'POST' depending on your backend implementation
+                const response = await fetch('http://localhost:3000/new',{
+                    method: 'GET', 
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`, // Add token to the Authorization header
-                        'Content-Type': 'application/json', // Optional for GET requests, useful for POST
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`, 
+                        'Content-Type': 'application/json', 
                     },
                 });
                 const comicsData = await response.json();
@@ -25,7 +25,7 @@ const Liked = () => {
 
     return (
         <div>
-            <h1 style={{ textAlign: 'center' }}>Liked Comics</h1>
+            <h1 style={{ textAlign: 'center' }}>New Comics</h1>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
                 {Array.isArray(comics) &&
                     comics.map((comic) => (
@@ -78,8 +78,6 @@ const ComicCard = ({ comic }) => {
                     {readMore ? 'Read Less' : 'Read More'}
                 </button>
             </p>
-
-            {/* Carousel for Images */}
             <div style={{ position: 'relative', marginBottom: '10px' }}>
                 {comic.images_links.length > 0 && (
                     <img
@@ -133,4 +131,4 @@ const ComicCard = ({ comic }) => {
     );
 };
 
-export default Liked;
+export default New;

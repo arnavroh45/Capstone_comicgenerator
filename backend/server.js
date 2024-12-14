@@ -292,8 +292,6 @@ app.post('/vote', async (req, res) => {
       return res.status(500).send({ message: 'Failed to update vote', error: error.message });
   }
 });
-
-
 app.get('/popular', async (req, res) => {
   try {
       const popularComics = await db.collection('Comics').aggregate([
@@ -313,20 +311,15 @@ app.get('/liked', async (req, res) => {
         return res.status(401).send({ message: 'Authorization header missing' });
     }
   const token = authHeader.split(' ')[1];
+  console.log(token);
   const uname=(jwt.decode(token).name);
   const eid=(jwt.decode(token).email);
   const comicId=uname+eid;
   try {
-  
-      
       if (!comicId) {
           return res.status(400).send({ message: 'Comic ID is required' });
       }
-      
-      
       const likedComics = await db.collection('Comics').find({ likes: comicId }).toArray();
-
-      
       if (likedComics.length > 0) {
           return res.status(200).send({ comics: likedComics });
       } else {
@@ -335,6 +328,29 @@ app.get('/liked', async (req, res) => {
   } catch (error) {
       console.error('Error fetching liked comics:', error);
       return res.status(500).send({ message: 'Failed to fetch liked comics', error: error.message });
+  }
+});
+app.get('/new', async (req, res) => { 
+  try {
+      const latestComics = await db.collection('Comics').aggregate([
+          {
+              $addFields: {
+                  parsedDate: {
+                      $dateFromString: {
+                          dateString: "$created_at",
+                          format: "%Y-%m-%d %H:%M:%S"
+                      }
+                  }
+              }
+          },
+          { $sort: { parsedDate: -1 } }, 
+          { $limit: 4 } 
+      ]).toArray();
+
+      return res.status(200).send({ message: 'Latest 5 Comics', comics: latestComics });
+  } catch (error) {
+      console.error('Error fetching latest comics:', error);
+      return res.status(500).send({ message: 'Failed to fetch latest comics', error: error.message });
   }
 });
 

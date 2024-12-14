@@ -1,43 +1,46 @@
 import React, { useState } from 'react';
+import Slider from 'react-slick'; // Import react-slick
 import './PublishPage.css';
-import background from '../assets/background.png'; // Update the path if necessary
+import 'slick-carousel/slick/slick.css'; // Import slick-carousel styles
+import 'slick-carousel/slick/slick-theme.css';
+import background from '../assets/background.png';
 
 const PublishPage = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [message, setMessage] = useState('');
+  const [images, setImages] = useState([]); // To store the images from the backend
   const [loading, setLoading] = useState(false);
 
   const handlePublish = async (e) => {
-    e.preventDefault(); // Prevent page reload
+    e.preventDefault();
 
-    // Validate input
     if (!title || !description) {
       setMessage('Please fill in both the title and description.');
       return;
     }
 
-    setLoading(true); // Show loading state while the request is in progress
+    setLoading(true);
 
-    // API call to generate the comic
     try {
       const response = await fetch('http://127.0.0.1:8000/generate_comic/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include the token for authentication
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
           title,
-          scenario: description, // Assuming 'description' corresponds to the 'scenario'
-          style: "Epic, dramatic, vibrant, detailed, contrasting, traditional, dynamic, emotional, mythological, intense.", // Replace with the actual style if applicable
-          template: "You are a cartoon creator. You will be given a short scenario, which you must split into multiple parts. Each part represents a different cartoon panel. For each panel: Description: Provide a detailed description of the panel. Use concise, descriptive phrases separated by commas to define: The characters in the panel, described each time (appearance, clothing, and actions). The background of the panel (specific setting, objects, and mood). Text: Provide the dialogue or narration for the panel in the form of two small sentences, one per character (if applicable). Ensure each sentence starts with the character's name. Rules: Use the given character descriptions instead of their names when describing the panel. Stick strictly to the format in the example. Ensure the output is structured, visually descriptive, and limited to the specified elements. Example input: Characters: Adrien: a guy with blond hair wearing glasses. Vincent: a guy with black hair wearing a hat. Scenario: Adrien and Vincent want to start a new product, and they create it in one night before presenting it to the board. Example output: # Panel 1 Description: 2 guys, a blond hair guy wearing glasses, a dark hair guy wearing a hat, sitting at the office, with computers, desk cluttered with papers and coffee cups, nighttime outside the window Text: Vincent: I think Generative AI are the future of the company. Adrien: Let's create a new product with it. # Panel 2 Description: a blond hair guy wearing glasses, typing on a keyboard, a dark hair guy wearing a hat, sketching on a tablet, office room with dim lighting, papers and sketches scattered everywhere Text: Adrien: We need to finish this by morning! Vincent: I'm already designing the interface. Short Scenario: {scenario} Split the scenario into multiple parts. ", // Replace with the actual template if applicable
+          scenario: description,
+          style: "Epic, dramatic, vibrant, detailed, contrasting, traditional, dynamic, emotional, mythological, intense.",
+          template: "Your template here...",
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        setMessage(`Comic generated successfully: ${data.message}`);
+        setMessage(`Comic generated successfully!`);
+        setImages(data.images_links || []); // Assuming backend sends images in `images_links`
       } else {
         const errorData = await response.json();
         setMessage(`Error: ${errorData.detail || 'Failed to generate comic.'}`);
@@ -45,8 +48,17 @@ const PublishPage = () => {
     } catch (error) {
       setMessage(`Error: ${error.message}`);
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
+  };
+
+  // Carousel settings for react-slick
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
   };
 
   return (
@@ -62,7 +74,7 @@ const PublishPage = () => {
             placeholder="Give a Title to your comic"
             className="publishpage-input-field"
             value={title}
-            onChange={(e) => setTitle(e.target.value)} // Update title state
+            onChange={(e) => setTitle(e.target.value)} 
           />
           <label htmlFor="description" className="publishpage-input-label">Description</label>
           <input
@@ -72,13 +84,13 @@ const PublishPage = () => {
             placeholder="Give a brief description of your comic"
             className="publishpage-input-field"
             value={description}
-            onChange={(e) => setDescription(e.target.value)} // Update description state
+            onChange={(e) => setDescription(e.target.value)} 
           />
           <button
             id="submit"
             className="publishpage-publish-button"
-            onClick={handlePublish} // Trigger API call
-            disabled={loading} // Disable button while loading
+            onClick={handlePublish} 
+            disabled={loading} 
           >
             {loading ? 'Publishing...' : 'Publish'}
           </button>
@@ -87,9 +99,18 @@ const PublishPage = () => {
 
       <div className="publishpage-content">
         <div className="publishpage-output-section">
-          <div className="publishpage-output-placeholder">
-            {message && <p className="publishpage-message">{message}</p>} {/* Display messages */}
-          </div>
+          {message && <p className="publishpage-message">{message}</p>}
+          {images.length > 0 && (
+            <div className="publishpage-carousel">
+              <Slider {...settings}>
+                {images.map((image, index) => (
+                  <div key={index} className="carousel-slide">
+                    <img src={image} alt={`Comic Panel ${index + 1}`} className="carousel-image" />
+                  </div>
+                ))}
+              </Slider>
+            </div>
+          )}
         </div>
       </div>
     </div>
