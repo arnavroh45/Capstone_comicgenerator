@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
-const Popular = () => {
+const New = () => {
     const [comics, setComics] = useState([]);
-
     useEffect(() => {
-        const fetchComics = async () => {
+        const fetchComics = async (comicId) => {
             try {
-                const response = await fetch('http://localhost:3000/popular');
+                const response = await fetch('http://localhost:3000/new',{
+                    method: 'GET', 
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`, 
+                        'Content-Type': 'application/json', 
+                    },
+                });
                 const comicsData = await response.json();
+                console.log('Fetched Comics Data:', comicsData);
                 setComics(comicsData.comics);
             } catch (error) {
                 console.error('Error fetching comics:', error);
@@ -17,55 +23,31 @@ const Popular = () => {
         fetchComics();
     }, []);
 
-    const handleVote = async (title, comicId, type) => {
-        console.log(`${type} for comic with ID: ${comicId}`);
-
-        try {
-            const response = await fetch('http://localhost:3000/vote', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ title, comicId, type }),
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                console.log('Vote response:', data.message);
-            } else {
-                console.error('Error from backend:', data.message);
-            }
-        } catch (error) {
-            console.error('Error sending vote request:', error);
-        }
-    };
     return (
         <div>
-            <h1 style={{ textAlign: 'center' }}>Trending Comics</h1>
+            <h1 style={{ textAlign: 'center' }}>New Comics</h1>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
-                {Array.isArray(comics) && comics.map((comic) => (
-                    <ComicCard
-                        key={comic._id}
-                        comic={comic}
-                        handleVote={handleVote}
-                    />
-                ))}
+                {Array.isArray(comics) &&
+                    comics.map((comic) => (
+                        <ComicCard key={comic._id} comic={comic} />
+                    ))}
             </div>
         </div>
     );
 };
 
-const ComicCard = ({ comic, handleVote }) => {
+const ComicCard = ({ comic }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [readMore, setReadMore] = useState(false);  // State for Read More functionality
+    const [readMore, setReadMore] = useState(false);
 
     const handleNext = () => {
         setCurrentIndex((prev) => (prev + 1) % comic.images_links.length);
     };
 
     const handlePrev = () => {
-        setCurrentIndex((prev) => (prev - 1 + comic.images_links.length) % comic.images_links.length);
+        setCurrentIndex((prev) =>
+            (prev - 1 + comic.images_links.length) % comic.images_links.length
+        );
     };
 
     return (
@@ -79,8 +61,6 @@ const ComicCard = ({ comic, handleVote }) => {
             }}
         >
             <h3>{comic.title || 'Untitled Comic'}</h3>
-
-            {/* Read More functionality */}
             <p>
                 {readMore
                     ? comic.scenario
@@ -98,8 +78,6 @@ const ComicCard = ({ comic, handleVote }) => {
                     {readMore ? 'Read Less' : 'Read More'}
                 </button>
             </p>
-
-            {/* Carousel for Images */}
             <div style={{ position: 'relative', marginBottom: '10px' }}>
                 {comic.images_links.length > 0 && (
                     <img
@@ -149,40 +127,8 @@ const ComicCard = ({ comic, handleVote }) => {
                     </>
                 )}
             </div>
-
-            {/* Voting Buttons */}
-            <div style={{ marginTop: '10px' }}>
-                <button
-                    style={{
-                        margin: '5px',
-                        padding: '8px 16px',
-                        backgroundColor: 'green',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                    }}
-                    onClick={() => handleVote(comic.title, comic.user_id, 'Upvote')}
-                >
-                    Upvote
-                </button>
-                <button
-                    style={{
-                        margin: '5px',
-                        padding: '8px 16px',
-                        backgroundColor: 'red',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                    }}
-                    onClick={() => handleVote(comic.title, comic.user_id, 'Downvote')}
-                >
-                    Downvote
-                </button>
-            </div>
         </div>
     );
 };
 
-export default Popular;
+export default New;

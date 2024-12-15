@@ -11,6 +11,8 @@ import DashboardPage from './components/Dashboard';
 import Community from './components/Community';
 import Comic from './components/Comics';
 import Popular from './components/popular';
+import Liked from './components/Liked';
+import New from './components/New';
 function App() {
   return (
     <Router>
@@ -26,6 +28,8 @@ function App() {
         <Route path="/user_comics" element={<Comic />} />
         <Route path="/publish" element={<PublishPage />} /> 
         <Route path="/popular" element={<Popular />} /> 
+        <Route path="/liked" element={<Liked />} /> 
+        <Route path="/new" element={<New />} /> 
       </Routes>
     </Router>
   );

@@ -143,7 +143,7 @@ async def generate_comic(request: ComicRequest, user: dict = Depends(verify_toke
             "style": request.style,
             "images_links": image_links,
             "strip_links": strip_links,
-            "created_at": datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')  # Custom format
+            "created_at": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')  # Custom format
         }
         comics.insert_one(document)
 
