@@ -9,7 +9,7 @@
 
 .intro-header {
     margin-top: -190px; /* Adjust this value to bring the text closer */
-    margin-bottom: -10px; /* Reduce space below the header text */
+    margin-bottom: 5px; /* Reduce space below the header text */
 }
 
 .hero-section {
@@ -46,7 +46,7 @@
     background-color: #ffd700; /* Yellow background for the button */
     color: #000; /* Black text */
     margin-top: 0; /* Remove any extra margin above the button */
-    padding: 10px 20px; /* Optionally reduce padding for a more compact button */
+    padding: 12px 24px; /* Optionally reduce padding for a more compact button */
     border: none;
     border-radius: 5px;
     font-size: 1rem;
