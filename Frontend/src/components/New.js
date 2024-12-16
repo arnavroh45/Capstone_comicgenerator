@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react';
 const New = () => {
     const [comics, setComics] = useState([]);
     useEffect(() => {
-        const fetchComics = async (comicId) => {
+        const fetchComics = async () => {
             try {
-                const response = await fetch('http://localhost:3000/new',{
-                    method: 'GET', 
+                const response = await fetch('http://localhost:3000/new', {
+                    method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`, 
-                        'Content-Type': 'application/json', 
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json',
                     },
                 });
                 const comicsData = await response.json();
@@ -26,7 +26,7 @@ const New = () => {
     return (
         <div>
             <h1 style={{ textAlign: 'center' }}>New Comics</h1>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
                 {Array.isArray(comics) &&
                     comics.map((comic) => (
                         <ComicCard key={comic._id} comic={comic} />
@@ -58,10 +58,15 @@ const ComicCard = ({ comic }) => {
                 padding: '16px',
                 maxWidth: '300px',
                 textAlign: 'center',
+                backgroundColor: '#fff', // White card background
+                color: '#000', // Black text
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Subtle shadow
             }}
         >
-            <h3>{comic.title || 'Untitled Comic'}</h3>
-            <p>
+            <h3 style={{ margin: '0 0 10px 0', color: '#000' }}>
+                {comic.title || 'Untitled Comic'}
+            </h3>
+            <p style={{ color: '#000', lineHeight: '1.4', fontSize: '14px' }}>
                 {readMore
                     ? comic.scenario
                     : `${comic.scenario.substring(0, 100)}...`}
@@ -73,6 +78,7 @@ const ComicCard = ({ comic }) => {
                         color: 'blue',
                         cursor: 'pointer',
                         textDecoration: 'underline',
+                        fontSize: '12px',
                     }}
                 >
                     {readMore ? 'Read Less' : 'Read More'}
