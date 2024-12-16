@@ -154,6 +154,7 @@ async def generate_comic(request: ComicRequest, user: dict = Depends(verify_toke
     return {
         "message": "Comic generation successful.",
         "strips": "Done",
+        "image_links": image_links
     }
 
 # API endpoint to get the generated comic strip
