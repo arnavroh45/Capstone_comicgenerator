@@ -72,7 +72,7 @@ const SignUp = () => {
             <label>
               <a href='http://localhost:3002/Reset'>Forgot Password</a>
             </label>
-            <button id="signup" type="submit" className="signup-button">Sign Up</button>
+            <button id="signup" type="submit" className="signup-button">Login</button>
           </form>
         </div>
       </div>
