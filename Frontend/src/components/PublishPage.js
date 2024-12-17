@@ -33,14 +33,15 @@ const PublishPage = () => {
           title,
           scenario: description,
           style: "Epic, dramatic, vibrant, detailed, contrasting, traditional, dynamic, emotional, mythological, intense.",
-          template: "Your template here...",
+          template: "You are a cartoon creator. You will be given a short scenario, you must split it in multiple parts. Try to make it as much detailed as possible.  Each part will be a different cartoon panel. For each cartoon panel, you will write a description of it with: - the characters in the panel, they must be described precisely each time - the background of the panel. The description should be only word or group of word delimited by a comma, no sentence. Always use the characters descriptions instead of their name in the cartoon panel description. Make sure to describe the characters appropriately in the description. You will also write the text of the panel. The text should not be more than 2 small sentences. Each sentence should start by the character name. Example input: Characters: Adrien is a guy with blond hair wearing glasses. Vincent is a guy with black hair wearing a hat. Adrien and vincent want to start a new product, and they create it in one night before presenting it to the board. Strictly stick to the format as mentioned in the example provided, Example output: # Panel 1 description: 2 guys, a blond hair guy wearing glasses, a dark hair guy wearing hat, sitting at the office, with computers text: Vincent: I think Generative AI are the future of the company. Adrien: Let's create a new product with it. # end Short Scenario: {scenario} Split the scenario in multiple parts:",
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
+        console.log(data.image_links);
         setMessage(`Comic generated successfully!`);
-        setImages(data.images_links || []); // Assuming backend sends images in `images_links`
+        setImages(data.image_links || []); // Assuming backend sends images in `images_links`
       } else {
         const errorData = await response.json();
         setMessage(`Error: ${errorData.detail || 'Failed to generate comic.'}`);
@@ -105,11 +106,18 @@ const PublishPage = () => {
               <Slider {...settings}>
                 {images.map((image, index) => (
                   <div key={index} className="carousel-slide">
-                    <img src={image} alt={`Comic Panel ${index + 1}`} className="carousel-image" />
+                    <img src={image} alt={`Comic Panel ${index + 1}`} className="carousel-image" 
+                    style={{
+                            width: '90%',
+                            height: '400px',
+                            borderRadius: '4px',
+                            paddingLeft:'40px'
+                      }} />
                   </div>
                 ))}
               </Slider>
             </div>
+            
           )}
         </div>
       </div>

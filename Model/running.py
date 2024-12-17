@@ -70,8 +70,10 @@ def image_url_to_base64(image_url):
 async def generate_comic(request: ComicRequest, user: dict = Depends(verify_token)):
     if not request.scenario or not request.style:
         raise HTTPException(status_code=400, detail="Both 'scenario' and 'style' are required.")
+    # print(user_id,comic_title)
     try:
         userdata = users.find_one({"email": user.get('email')})
+        print(userdata)
         if not userdata:
             raise HTTPException(status_code=404, detail="User not found")
         user_id = userdata['uid']
@@ -101,7 +103,7 @@ async def generate_comic(request: ComicRequest, user: dict = Depends(verify_toke
             panels = json.loads(panels)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during setup or panel generation: {str(e)}")
-
+    
     try:
         panel_images = []
         image_links = []
@@ -153,10 +155,9 @@ async def generate_comic(request: ComicRequest, user: dict = Depends(verify_toke
         # Return the URLs of generated strips
     return {
         "message": "Comic generation successful.",
+        "image_links": image_links,
         "strips": "Done",
     }
-
-# API endpoint to get the generated comic strip
 @app.get("/get_comic/{comic_title}")
 async def get_comic(comic_title: str,  user : dict = Depends(verify_token)):
     userdata = users.find_one({"email": user.get('email')})
