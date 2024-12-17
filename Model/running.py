@@ -85,8 +85,7 @@ async def generate_comic(request: ComicRequest, user: dict = Depends(verify_toke
         # Generate panels from the scenario
         panels = generate_panels(request.scenario, request.template)
         panels_path = f"{user_id}_comic/{comic_title}/panels"
-        json_data = json.dumps(panels)
-        json_bytes = BytesIO(json.dumps(json_data).encode('utf-8'))
+        json_bytes = BytesIO(json.dumps(panels).encode('utf-8'))
         response = cloudinary.uploader.upload(
             json_bytes,
             resource_type = "raw",
@@ -144,6 +143,7 @@ async def generate_comic(request: ComicRequest, user: dict = Depends(verify_toke
             "scenario": request.scenario,
             "style": request.style,
             "images_links": image_links,
+            "genre": request.genre,
             "strip_links": strip_links,
             "created_at": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')  # Custom format
         }
@@ -155,7 +155,6 @@ async def generate_comic(request: ComicRequest, user: dict = Depends(verify_toke
         # Return the URLs of generated strips
     return {
         "message": "Comic generation successful.",
-        "image_links": image_links,
         "strips": "Done",
         "image_links": image_links
     }

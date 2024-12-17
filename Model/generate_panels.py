@@ -61,27 +61,39 @@ def extract_panel_info(input_string):
         list: A list of dictionaries containing extracted panel information.
     """
     # panel_data = re.split(r'# Panel \d+', input_string.strip())
-    panel_data = re.split(r'# Panel \d+', input_string.strip(), flags=re.IGNORECASE)
+    # panel_data = re.split(r'# Panel \d+', input_string.strip(), flags=re.IGNORECASE)
+
+    pattern = r"Panel (\d+) description: (.*?) text: (.*?)\n"
+    matches = re.findall(pattern, input_string, re.DOTALL)
 
     # List to store the JSON output
     panels_list = []
     # Loop through each panel and extract information
-    for i, panel in enumerate(panel_data[1:], start=1):  # Skip the first split part (introductory text)
-        # Extract description and text using regex
-        description_match = re.search(r"description:\s*(.+?)\ntext:", panel, re.DOTALL | re.IGNORECASE)
-        text_match = re.search(r"text:\s*(.+?)$", panel, re.DOTALL | re.IGNORECASE)
-        # Extract values or default to empty string
-        description = description_match.group(1).strip() if description_match else ""
-        text = text_match.group(1).strip() if text_match else ""
+    # for i, panel in enumerate(panel_data[1:], start=1):  # Skip the first split part (introductory text)
+    #     # Extract description and text using regex
+    #     description_match = re.search(r"description:\s*(.+?)\ntext:", panel, re.DOTALL | re.IGNORECASE)
+    #     text_match = re.search(r"text:\s*(.+?)$", panel, re.DOTALL | re.IGNORECASE)
+    #     # Extract values or default to empty string
+    #     description = description_match.group(1).strip() if description_match else ""
+    #     text = text_match.group(1).strip() if text_match else ""
 
-        # Create dictionary for JSON output
-        panel_dict = {
-            "number": i,
-            "Description": description,
-            "Background": "",  # Background can be filled if available later
-            "Text": text
-        }
-        # Append to the list
-        panels_list.append(panel_dict)
+    #     # Create dictionary for JSON output
+    #     panel_dict = {
+    #         "number": i,
+    #         "Description": description,
+    #         "Background": "",  # Background can be filled if available later
+    #         "Text": text
+    #     }
+    #     # Append to the list
+    #     panels_list.append(panel_dict)
+
+    for match in matches:
+        panel_number, description, text = match
+        panels_list.append({
+            "number": int(panel_number),
+            "Description": description.strip(),
+            "Background":"",
+            "Text": text.strip()
+        })
     return panels_list
 
