@@ -17,12 +17,11 @@ const PublishPage = () => {
     e.preventDefault();
 
     if (!title || !description || !genre) {
-      setMessage('Please fill in both the title and description.');
+      setMessage('Please fill in the title, description, and genre.');
       return;
     }
 
     setLoading(true);
-    console.log(genre);
     
     try {
       const response = await fetch('http://127.0.0.1:8000/generate_comic/', {
@@ -42,9 +41,8 @@ const PublishPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        // console.log(data.image_links);
         setMessage(`Comic generated successfully!`);
-        setImages(data.image_links || []); 
+        setImages(data.image_links || []);
       } else {
         const errorData = await response.json();
         setMessage(`Error: ${errorData.detail || 'Failed to generate comic.'}`);
@@ -69,68 +67,83 @@ const PublishPage = () => {
     <div className="publishpage-container">
       <header className="publishpage-header" style={{ backgroundImage: `url(${background})` }}>
         <div className="publishpage-logo">Comic Gen</div>
-        <div className="publishpage-input-section">
-          <label htmlFor="title" className="publishpage-input-label">Title</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            placeholder="Give a Title to your comic"
-            className="publishpage-input-field"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)} 
-          />
-          <label htmlFor="description" className="publishpage-input-label">Description</label>
-          <input
-            type="text"
-            id="description"
-            name="description"
-            placeholder="Give a brief description of your comic"
-            className="publishpage-input-field"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)} 
-          />
-           <label for="genre" className="publishpage-input-label">Select a country:</label>
-            <select id="genre" name="genre" className="publishpage-input-field" onChange={(e) => setGenre(e.target.value)}>
-              <option value="" disabled selected>-- Select a genre --</option>
-              <option value="Fantasy">Fantasy</option>
-              <option value="Adventure">Adventure</option>
-              <option value="Romance">Romance</option>
-              <option value="Horror">Horror</option>
-              <option value="Sci-Fi">Sci-Fi</option>
-              <option value="Mystery">Mystery</option>
-            </select>
+        
+        {/* Form Container */}
+        <div className="publishpage-form-container">
+          {/* Input Section */}
+          <div className="publishpage-input-section">
+            {/* Title Input */}
+            <div className="publishpage-input-group">
+              <label htmlFor="title" className="publishpage-input-label">Title:</label>
+              <input
+                type="text"
+                id="title"
+                placeholder="Give a Title to your comic"
+                className="publishpage-input-field"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)} 
+              />
+            </div>
+
+            {/* Dropdown for Genre */}
+            <div className="publishpage-input-group">
+              <label htmlFor="genre" className="publishpage-input-label">Select a genre:</label>
+              <select
+                id="genre"
+                className="publishpage-input-field"
+                onChange={(e) => setGenre(e.target.value)}
+              >
+                <option value="" disabled selected>-- Select a genre --</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Romance">Romance</option>
+                <option value="Horror">Horror</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+                <option value="Mystery">Mystery</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Description Input */}
+          <div className="publishpage-description">
+            <label htmlFor="description" className="publishpage-input-label">Description:</label>
+            <textarea
+              id="description"
+              placeholder="Give a brief description of your comic"
+              className="publishpage-description-field"
+              rows="4"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            ></textarea>
+          </div>
+
+          {/* Publish Button */}
           <button
-            id="submit"
             className="publishpage-publish-button"
-            onClick={handlePublish} 
-            disabled={loading} 
+            onClick={handlePublish}
+            disabled={loading}
           >
             {loading ? 'Publishing...' : 'Publish'}
           </button>
         </div>
       </header>
 
+      {/* Output Section */}
       <div className="publishpage-content">
         <div className="publishpage-output-section">
           {message && <p className="publishpage-message">{message}</p>}
           {images.length > 0 && (
-            <div className="publishpage-carousel">
-              <Slider {...settings}>
-                {images.map((image, index) => (
-                  <div key={index} className="carousel-slide">
-                    <img src={image} alt={`Comic Panel ${index + 1}`} className="carousel-image" 
-                    style={{
-                            width: '90%',
-                            height: '400px',
-                            borderRadius: '4px',
-                            paddingLeft:'40px'
-                      }} />
-                  </div>
-                ))}
-              </Slider>
-            </div>
-            
+            <Slider {...settings}>
+              {images.map((image, index) => (
+                <div key={index} className="carousel-slide">
+                  <img 
+                    src={image} 
+                    alt={`Comic Panel ${index + 1}`} 
+                    className="carousel-image"
+                  />
+                </div>
+              ))}
+            </Slider>
           )}
         </div>
       </div>

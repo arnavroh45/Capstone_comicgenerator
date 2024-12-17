@@ -139,7 +139,7 @@ const ComicCard = ({ comic, handleVote }) => {
                         style={{
                             margin: '5px',
                             padding: '6px 12px',
-                            backgroundColor: voteState === 'Upvote' ? '#00e64d' : '00802b',
+                            backgroundColor: voteState === 'Upvote' ?'rgb(0, 227, 76)' : '00802b',
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',

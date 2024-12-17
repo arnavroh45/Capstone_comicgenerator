@@ -15,8 +15,8 @@ const Home = () => {
       <h2>Join Comic Gen Today!</h2>
       <p>Log in to continue your adventures or sign up to start creating AI-powered comics.</p>
       <div className="button-container">
-        <button className="home-button" onClick={() => navigate('/Signup')}>Login</button>
         <button className="home-button" onClick={() => navigate('/Login')}>Sign Up</button>
+        <button className="home-button" onClick={() => navigate('/Signup')}>Login</button>
       </div>
       <hr />
     </div>
