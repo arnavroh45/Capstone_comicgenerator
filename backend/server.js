@@ -69,6 +69,8 @@ app.post('/signup', async (req, res) => {
     }
 
     const token = generateJwt(existingUser.email, existingUser.user_name);
+  
+    
     return res.status(200).json({
       message: "Login successful",
       token,
@@ -330,6 +332,34 @@ app.get('/liked', async (req, res) => {
       return res.status(500).send({ message: 'Failed to fetch liked comics', error: error.message });
   }
 });
+app.get("/getvote", async (req, res) => { 
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader) {
+    return res.status(401).send({ message: "Authorization header missing" });
+  }
+
+  const token = authHeader.split(" ")[1];
+  try {
+    const uname = jwt.decode(token).name;
+    const eid = jwt.decode(token).email;
+    const comicId = uname + eid;
+    
+    const result = await db.collection("Comics")
+      .aggregate([
+        { $match: { user_id: comicId } }, 
+        { $group: { _id: null, totalVotes: { $sum: "$vote" } } }, 
+      ])
+      .toArray();
+    const totalVotes = result.length > 0 ? result[0].totalVotes : 0;
+    res.status(200).send({ totalVotes });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+
+
 app.get('/new', async (req, res) => { 
   try {
       const latestComics = await db.collection('Comics').aggregate([
