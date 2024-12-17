@@ -44,7 +44,56 @@ body {
     border-radius: 5px;
     color: #ffd700;
   }
-  
+  /* User Dropdown Container */
+.user-dropdown {
+  position: relative; /* Relative positioning for dropdown */
+  display: inline-block;
+  margin-left: 10px; /* Adjust spacing */
+}
+
+/* User Icon Styling */
+.user-icon {
+  cursor: pointer;
+  font-size: 18px; /* Adjust icon size */
+  color: #ffffff; /* Icon color */
+  padding: 5px 10px;
+  border-radius: 50%;
+  background-color: #333; /* Optional background for visibility */
+}
+
+/* Dropdown Content */
+.dropdown-content {
+  display: none; /* Initially hidden */
+  position: absolute;
+  right: 0; /* Align dropdown to the right */
+  top: 30px; /* Position below the icon */
+  background-color: #222; /* Dropdown background */
+  min-width: 150px; /* Dropdown width */
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 1000; /* Ensure it's above other elements */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Links and Text Inside Dropdown */
+.dropdown-content a,
+.dropdown-content p {
+  color: #f1f1f1; /* Text color */
+  padding: 5px 10px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+}
+
+.dropdown-content a:hover {
+  background-color: #444; /* Hover effect for links */
+}
+
+/* Show Dropdown on Hover */
+.user-dropdown:hover .dropdown-content {
+  display: block; /* Show dropdown when hovering */
+}
+
   .dashboard-header .search-container {
     display: flex;
     align-items: center;
