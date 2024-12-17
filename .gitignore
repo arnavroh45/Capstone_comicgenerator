@@ -1,3 +1,4 @@
 node_modules
 Model/__pycache__/
 Model/env_name/
+Model/.env
