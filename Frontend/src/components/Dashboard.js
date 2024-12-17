@@ -1,66 +1,129 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
-import Footer from './Footer';
+import Footer from "./Footer";
+
 function DashboardPage() {
   const navigate = useNavigate();
 
+  const handlePublishClick = () => navigate("/publish");
 
-  const handlePublishClick = () => {
-    navigate("/publish");
-  };
+  const carouselItems = [
+    {
+      title: "Mirza and Sahiba",
+      description:
+        "A series of visually rich and emotional comic panels that capture the poignant love story of Mirza and Sahiba.",
+      category: "Comic - Fantasy",
+      image:
+        "https://res.cloudinary.com/dfntvlmqc/image/upload/v1733677566/Sahiba_born_in_a_rich_family_htyhnz.png",
+    },
+    {
+      title: "Heer and Ranjha",
+      description:
+        "An enchanting tale of two souls deeply in love, overcoming hardships to preserve their bond.",
+      category: "Comic - Romance",
+      image:
+        "https://res.cloudinary.com/dfntvlmqc/image/upload/v1733677566/Sahiba_born_in_a_rich_family_htyhnz.png",
+    },
+  ];
+
+  const genres = [
+    { name: "Fantasy", icon: "🎭" },
+    { name: "Adventure", icon: "🗺️" },
+    { name: "Romance", icon: "❤️" },
+    { name: "Mystery", icon: "🕵️‍♂️" },
+    { name: "Horror", icon: "👻" },
+    { name: "Sci-Fi", icon: "🚀" },
+  ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Automatic carousel effect
+  useEffect(() => {
+    const slideInterval = setInterval(() => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === carouselItems.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 3000); // Every 3 seconds
+    return () => clearInterval(slideInterval);
+  }, [carouselItems.length]);
+
+  const currentSlide =
+    carouselItems[currentIndex] || carouselItems[0]; // Fallback to prevent undefined
 
   return (
     <div className="dashboard">
-      {/* Header Section */}
+      {/* Header */}
       <header className="dashboard-header">
-    
-        <div id="naam" className="logo">AI ComicGen</div>
+        <div id="naam" className="logo">
+          AI ComicGen
+        </div>
         <nav className="navigation">
-          <a style={{paddingTop:"18px"}} href="/">Home</a>
-          <a style={{paddingTop:"18px"}} href="/user_comics">Comics</a>
-          <a style={{paddingTop:"18px"}} href="/community">Community</a>
-          <a style={{paddingTop:"18px"}} href="/liked">Liked</a>
-          <a style={{paddingTop:"18px"}} href="/popular">Popular</a>
-          <a style={{paddingTop:"18px"}} href="/new">New</a> 
+          <a href="/">Home</a>
+          <a href="/user_comics">Comics</a>
+          <a href="/novels">Novels</a>
+          <a href="/community">Community</a>
+          <a href="/liked">Liked</a>
+          <a href="/popular">Popular</a>
+          <a href="/new">New</a>
           <input type="search" placeholder="Search" />
-          <button id="publish" className="btn-publish" onClick={handlePublishClick}>
+          <button className="btn-publish" onClick={handlePublishClick}>
             Publish
           </button>
         </nav>
       </header>
 
-      
-
+      {/* Spotlight Carousel */}
       <div className="spotlight">
-        {/* Vote Now Button */}
-        <div className="vote-now">
-          <button id="vote" onClick={() => navigate('/community')}>VOTE NOW</button>
-        
-        </div>
-
-        {/* Comic Highlight Section */}
-        <div className="comic-highlight">
-          {/* Comic Info */}
-          <div className="comic-info">
-            <h3>Mirza and Sahiba</h3>
-            <p>A series of visually rich and emotional comic panels that capture the poignant love story of Mirza and Sahiba, focusing on key moments of their journey</p>
-            <div className="tags">
-              <span className="category">Comic - Fantasy</span>
+        <div className="carousel-container">
+          {/* Vote Now Button */}
+          <button className="vote-now-btn">Vote Now</button>
+          <div className="carousel-content">
+            {/* Text Content */}
+            <div className="text-content">
+              <h3>{currentSlide.title}</h3>
+              <p>{currentSlide.description}</p>
+              <span className="category">{currentSlide.category}</span>
             </div>
-          </div>
+            {/* Image Content */}
+            <div className="image-content">
+              <img
+                src={currentSlide.image}
+                alt={currentSlide.title}
+                className="carousel-image"
+              />
+            </div>
 
-          {/* Comic Cover Placeholder */}
-          <div className="comic-cover">
-          <img 
-  src="https://res.cloudinary.com/dfntvlmqc/image/upload/v1733677566/Sahiba_born_in_a_rich_family_htyhnz.png" 
-  alt="Comic Panel 1" 
-  style={{ width: '400px', height: '400px', borderRadius: '8px' }} 
-/>
           </div>
+          <div className="dots-navigation">
+      {carouselItems.map((_, index) => (
+        <span
+          key={index}
+          className={`dot ${index === currentIndex ? "active" : ""}`}
+          onClick={() => setCurrentIndex(index)}
+        ></span>
+      ))}
+    </div>
         </div>
-        
       </div>
+
+      {/* Genre Cards */}
+      <div className="genre-section">
+        <h2>Explore Genres</h2>
+        <div className="genre-container">
+          {genres.map((genre, index) => (
+            <div
+              key={index}
+              className="genre-card"
+              onClick={() => navigate(`/genres/${genre.name.toLowerCase()}`)}
+            >
+              <span className="genre-name">{genre.name}</span>
+              <span className="genre-icon">{genre.icon}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <Footer />
     </div>
   );

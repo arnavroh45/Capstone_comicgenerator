@@ -157,6 +157,7 @@ async def generate_comic(request: ComicRequest, user: dict = Depends(verify_toke
         "message": "Comic generation successful.",
         "image_links": image_links,
         "strips": "Done",
+        "image_links": image_links
     }
 @app.get("/get_comic/{comic_title}")
 async def get_comic(comic_title: str,  user : dict = Depends(verify_token)):
