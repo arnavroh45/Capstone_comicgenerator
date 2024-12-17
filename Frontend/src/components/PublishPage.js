@@ -7,6 +7,7 @@ import background from '../assets/background.png';
 
 const PublishPage = () => {
   const [title, setTitle] = useState('');
+  const [genre, setGenre] = useState('');
   const [description, setDescription] = useState('');
   const [message, setMessage] = useState('');
   const [images, setImages] = useState([]); // To store the images from the backend
@@ -15,13 +16,14 @@ const PublishPage = () => {
   const handlePublish = async (e) => {
     e.preventDefault();
 
-    if (!title || !description) {
+    if (!title || !description || !genre) {
       setMessage('Please fill in both the title and description.');
       return;
     }
 
     setLoading(true);
-
+    console.log(genre);
+    
     try {
       const response = await fetch('http://127.0.0.1:8000/generate_comic/', {
         method: 'POST',
@@ -31,6 +33,7 @@ const PublishPage = () => {
         },
         body: JSON.stringify({
           title,
+          genre,
           scenario: description,
           style: "Epic, dramatic, vibrant, detailed, contrasting, traditional, dynamic, emotional, mythological, intense.",
           template: "You are a cartoon creator. You will be given a short scenario, you must split it in multiple parts. Try to make it as much detailed as possible.  Each part will be a different cartoon panel. For each cartoon panel, you will write a description of it with: - the characters in the panel, they must be described precisely each time - the background of the panel. The description should be only word or group of word delimited by a comma, no sentence. Always use the characters descriptions instead of their name in the cartoon panel description. Make sure to describe the characters appropriately in the description. You will also write the text of the panel. The text should not be more than 2 small sentences. Each sentence should start by the character name. Example input: Characters: Adrien is a guy with blond hair wearing glasses. Vincent is a guy with black hair wearing a hat. Adrien and vincent want to start a new product, and they create it in one night before presenting it to the board. Strictly stick to the format as mentioned in the example provided, Example output: # Panel 1 description: 2 guys, a blond hair guy wearing glasses, a dark hair guy wearing hat, sitting at the office, with computers text: Vincent: I think Generative AI are the future of the company. Adrien: Let's create a new product with it. # end Short Scenario: {scenario} Split the scenario in multiple parts:",
@@ -39,9 +42,9 @@ const PublishPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.image_links);
+        // console.log(data.image_links);
         setMessage(`Comic generated successfully!`);
-        setImages(data.image_links || []); // Assuming backend sends images in `images_links`
+        setImages(data.image_links || []); 
       } else {
         const errorData = await response.json();
         setMessage(`Error: ${errorData.detail || 'Failed to generate comic.'}`);
@@ -87,6 +90,16 @@ const PublishPage = () => {
             value={description}
             onChange={(e) => setDescription(e.target.value)} 
           />
+           <label for="genre" className="publishpage-input-label">Select a country:</label>
+            <select id="genre" name="genre" className="publishpage-input-field" onChange={(e) => setGenre(e.target.value)}>
+              <option value="" disabled selected>-- Select a genre --</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Romance">Romance</option>
+              <option value="Horror">Horror</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Mystery">Mystery</option>
+            </select>
           <button
             id="submit"
             className="publishpage-publish-button"
