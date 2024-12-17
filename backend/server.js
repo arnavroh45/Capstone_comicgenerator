@@ -344,7 +344,7 @@ app.get("/getvote", async (req, res) => {
     const uname = jwt.decode(token).name;
     const eid = jwt.decode(token).email;
     const comicId = uname + eid;
-    console.log(uname);
+    
     const result = await db.collection("Comics")
       .aggregate([
         { $match: { user_id: comicId } }, 
