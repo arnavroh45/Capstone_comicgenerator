@@ -7,6 +7,8 @@ function DashboardPage() {
   const navigate = useNavigate();
 
   const handlePublishClick = () => navigate("/publish");
+  const handleVoteNowClick = () => navigate('/community'); 
+  
 
   const carouselItems = [
     {
@@ -18,12 +20,12 @@ function DashboardPage() {
         "https://res.cloudinary.com/dfntvlmqc/image/upload/v1733677566/Sahiba_born_in_a_rich_family_htyhnz.png",
     },
     {
-      title: "Heer and Ranjha",
+      title: "Vikram-Betaal",
       description:
-        "An enchanting tale of two souls deeply in love, overcoming hardships to preserve their bond.",
-      category: "Comic - Romance",
+        "King Vikram carries the mysterious Vetala through a forest, solving riddles that test his wisdom and courage.",
+      category: "Comic - Adventure",
       image:
-        "https://res.cloudinary.com/dfntvlmqc/image/upload/v1733677566/Sahiba_born_in_a_rich_family_htyhnz.png",
+        "https://res.cloudinary.com/dfntvlmqc/image/upload/v1733657038/Arnavasharma4_be21%40thapar.edu_comic/Vikramaditya/panel_1.png",
     },
   ];
 
@@ -44,7 +46,7 @@ function DashboardPage() {
       setCurrentIndex((prevIndex) =>
         prevIndex === carouselItems.length - 1 ? 0 : prevIndex + 1
       );
-    }, 3000); // Every 3 seconds
+    }, 4000); // Every 3 seconds
     return () => clearInterval(slideInterval);
   }, [carouselItems.length]);
 
@@ -77,7 +79,7 @@ function DashboardPage() {
       <div className="spotlight">
         <div className="carousel-container">
           {/* Vote Now Button */}
-          <button className="vote-now-btn">Vote Now</button>
+          <button className="vote-now-btn" onClick={handleVoteNowClick}>Vote Now</button>
           <div className="carousel-content">
             {/* Text Content */}
             <div className="text-content">

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-const Community = () => {
+const Fantasy = () => {
     const [comics, setComics] = useState([]);
 
     useEffect(() => {
         const fetchComics = async () => {
             try {
-                const response = await fetch('http://localhost:3000/comics');
+                const response = await fetch('http://localhost:3000/genre/fantasy');
                 const comicsData = await response.json();
                 console.log('Fetched Comics Data:', comicsData);
                 setComics(comicsData.comics);
@@ -139,7 +139,7 @@ const ComicCard = ({ comic, handleVote }) => {
                         style={{
                             margin: '5px',
                             padding: '6px 12px',
-                            backgroundColor: voteState === 'Upvote' ?'rgb(0, 227, 76)' : '00802b',
+                            backgroundColor: voteState === 'Upvote' ? '#00e64d' : '00802b',
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',
@@ -236,4 +236,4 @@ const ComicCard = ({ comic, handleVote }) => {
     );
 };
 
-export default Community;
+export default Fantasy;

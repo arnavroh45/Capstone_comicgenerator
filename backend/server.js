@@ -344,7 +344,7 @@ app.get('/new', async (req, res) => {
               }
           },
           { $sort: { parsedDate: -1 } }, 
-          { $limit: 4 } 
+          { $limit: 5 } 
       ]).toArray();
 
       return res.status(200).send({ message: 'Latest 5 Comics', comics: latestComics });
@@ -353,7 +353,73 @@ app.get('/new', async (req, res) => {
       return res.status(500).send({ message: 'Failed to fetch latest comics', error: error.message });
   }
 });
-
+app.get('/genre/adventure', async (req, res) => {
+  try {
+      const popularComics = await db.collection('Comics').aggregate([
+        { $match: {genre: "Adventure"} }
+      ]).toArray();
+      return res.status(200).send({ message: 'Top Comics', comics: popularComics });
+  } catch (error) {
+      console.error('Error fetching popular comics:', error);
+      return res.status(500).send({ message: 'Failed to fetch  comics', error: error.message });
+  }
+});
+app.get('/genre/fantasy', async (req, res) => {
+  console.log("Fantasy");
+  try {
+      const popularComics = await db.collection('Comics').aggregate([
+        { $match: {genre: "Fantasy"}}
+      ]).toArray();
+      return res.status(200).send({ message: 'Top Comics', comics: popularComics });
+  } catch (error) {
+      console.error('Error fetching comics:', error);
+      return res.status(500).send({ message: 'Failed to fetch comics', error: error.message });
+  }
+});
+app.get('/genre/horror', async (req, res) => {
+  try {
+      const popularComics = await db.collection('Comics').aggregate([
+        { $match:{genre: "Horror"}}
+      ]).toArray();
+      return res.status(200).send({ message: 'Top  Comics', comics: popularComics });
+  } catch (error) {
+      console.error('Error fetching popular comics:', error);
+      return res.status(500).send({ message: 'Failed to fetch comics', error: error.message });
+  }
+});
+app.get('/genre/Sci-Fi', async (req, res) => {
+  try {
+      const popularComics = await db.collection('Comics').aggregate([
+        { $match: {genre: "Sci-Fi"}}
+      ]).toArray();
+      return res.status(200).send({ message: 'Top 5 Comics', comics: popularComics });
+  } catch (error) {
+      console.error('Error fetching comics:', error);
+      return res.status(500).send({ message: 'Failed to fetch comics', error: error.message });
+  }
+});
+app.get('/genre/mystery', async (req, res) => {
+  try {
+      const popularComics = await db.collection('Comics').aggregate([
+        { $match:{genre: "Mystery"}}
+      ]).toArray();
+      return res.status(200).send({ message: 'Comics', comics: popularComics });
+  } catch (error) {
+      console.error('Error fetching comics:', error);
+      return res.status(500).send({ message: 'Failed to fetch comics', error: error.message });
+  }
+});
+app.get('/genre/romance', async (req, res) => {
+  try {
+      const popularComics = await db.collection('Comics').aggregate([
+        { $match:{genre: "Romance"}}
+      ]).toArray();
+      return res.status(200).send({ message: 'Comics', comics: popularComics });
+  } catch (error) {
+      console.error('Error fetching  comics:', error);
+      return res.status(500).send({ message: 'Failed to fetch comics', error: error.message });
+  }
+});
 app.listen(3001, () => {
   console.log("Server started");
 });

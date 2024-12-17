@@ -13,6 +13,7 @@ import Comic from './components/Comics';
 import Popular from './components/popular';
 import Liked from './components/Liked';
 import New from './components/New';
+import Fantasy from './components/Fantasy';
 function App() {
   return (
     <Router>
@@ -30,6 +31,7 @@ function App() {
         <Route path="/popular" element={<Popular />} /> 
         <Route path="/liked" element={<Liked />} /> 
         <Route path="/new" element={<New />} /> 
+        <Route path="/genre/fantasy" element={<Fantasy />} /> 
       </Routes>
     </Router>
   );
