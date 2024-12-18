@@ -10,6 +10,7 @@ This module provides functions to generate comic panels based on a given prompt 
 
 import re
 import os
+import time
 from io import BytesIO
 from gradio_client import Client
 from dotenv import load_dotenv
@@ -18,7 +19,9 @@ from config import LLM_MODEL
 
 load_dotenv()
 
-def generate_panels(prompt, template):
+
+
+def generate_panels(prompt, template, user_id, comic_title):
     """
     Generate comic panels based on a given prompt and template.
 
@@ -29,15 +32,31 @@ def generate_panels(prompt, template):
     Returns:
         list: A list of dictionaries containing panel information.
     """
-    client = Client(LLM_MODEL)
-    result = client.predict(
-            query = prompt,
-            system=template,
-            api_name="/model_chat"
-    )
+    Retries = 0
+    Max_retries = 5
+    while Retries < Max_retries:
+        try:
+            client = Client(LLM_MODEL)
+            result = client.predict(
+                    query = prompt,
+                    system=template,
+                    api_name="/model_chat"
+            )
+            break
+        except Exception as e:
+            Retries += 1
+            if "MaxRetryError" in str(e):
+                print(f"Quota exceeded. Waiting for 2 minutes before retrying...")
+                time.sleep(120)  # Wait 5 minutes
+            else:
+                print(e)
+                break
+    if Retries == Max_retries:
+        raise RuntimeError(f"Failed to generate.")
+
     panel_text = result[1][0][1]
     text_file = BytesIO(panel_text.encode('utf-8'))
-    file_url = upload_text_to_cloudinary(text_file, "user1", "comic_title_1", 1)
+    file_url = upload_text_to_cloudinary(text_file, user_id, comic_title, 1)
     text = read_text_from_cloudinary(file_url)
     # Save the text to a file and read from it again
     # with open('panel_new_1.txt', 'w') as file:
@@ -60,40 +79,39 @@ def extract_panel_info(input_string):
     Returns:
         list: A list of dictionaries containing extracted panel information.
     """
-    # panel_data = re.split(r'# Panel \d+', input_string.strip())
-    # panel_data = re.split(r'# Panel \d+', input_string.strip(), flags=re.IGNORECASE)
-
-    pattern = r"Panel (\d+) description: (.*?) text: (.*?)\n"
-    matches = re.findall(pattern, input_string, re.DOTALL)
-
+    # Use regex to split the input into panels, capturing the full panel content
+    panels = re.split(r'(#\s*Panel\s*\d+)', input_string.strip())[1:]
+    
     # List to store the JSON output
     panels_list = []
-    # Loop through each panel and extract information
-    # for i, panel in enumerate(panel_data[1:], start=1):  # Skip the first split part (introductory text)
-    #     # Extract description and text using regex
-    #     description_match = re.search(r"description:\s*(.+?)\ntext:", panel, re.DOTALL | re.IGNORECASE)
-    #     text_match = re.search(r"text:\s*(.+?)$", panel, re.DOTALL | re.IGNORECASE)
-    #     # Extract values or default to empty string
-    #     description = description_match.group(1).strip() if description_match else ""
-    #     text = text_match.group(1).strip() if text_match else ""
-
-    #     # Create dictionary for JSON output
-    #     panel_dict = {
-    #         "number": i,
-    #         "Description": description,
-    #         "Background": "",  # Background can be filled if available later
-    #         "Text": text
-    #     }
-    #     # Append to the list
-    #     panels_list.append(panel_dict)
-
-    for match in matches:
-        panel_number, description, text = match
-        panels_list.append({
-            "number": int(panel_number),
-            "Description": description.strip(),
-            "Background":"",
-            "Text": text.strip()
-        })
+    
+    # Process panels in pairs (panel header and content)
+    for i in range(0, len(panels), 2):
+        # Extract panel number
+        panel_number_match = re.search(r'\d+', panels[i])
+        panel_number = int(panel_number_match.group(0)) if panel_number_match else len(panels_list) + 1
+        
+        # Extract panel content
+        panel_content = panels[i + 1] if i + 1 < len(panels) else ""
+        
+        # Extract description
+        description_match = re.search(r'description:\s*(.+?)(?=\n*text:|$)', panel_content, re.DOTALL | re.IGNORECASE)
+        description = description_match.group(1).strip() if description_match else ""
+        
+        # Extract text
+        text_match = re.search(r'text:\s*(.+)', panel_content, re.DOTALL | re.IGNORECASE)
+        text = text_match.group(1).strip() if text_match else panel_content.strip()
+        
+        # Create panel dictionary
+        panel_dict = {
+            "number": panel_number,
+            "Description": description,
+            "Background": "",  # Background can be filled if available later
+            "Text": text
+        }
+        
+        # Append to the list
+        panels_list.append(panel_dict)
+    
     return panels_list
 

@@ -38,6 +38,13 @@ from stability_ai import text_to_image
 from config import SEGMIND_API_KEY, SEGMIND_URL, CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, db, users, comics
 from jwt_utils import get_token, verify_token
 from fastapi.middleware.cors import CORSMiddleware
+# from googletrans import Translator
+from deep_translator import GoogleTranslator
+
+with open("translation_mappings.json", "r", encoding="utf-8") as file:
+    LANGUAGE_MAP = json.load(file)
+
+# translator = Translator()
 
 load_dotenv()
 cloudinary.config(
@@ -80,10 +87,18 @@ async def generate_comic(request: ComicRequest, user: dict = Depends(verify_toke
         if not user_id:
             raise HTTPException(status_code=404, detail="User ID not found")
 
+        language_name = request.language
+        language_code = LANGUAGE_MAP.get(language_name)
+        if not language_code:
+            raise ValueError(f"Language '{language_name}' is not supported. Please use a valid language name.")
+        
         comic_title = request.title
-
+        if language_code != "en":
+            # translated_title = translator.translate(comic_title, lang_tgt=language_code)
+            translated_title = GoogleTranslator(target=language_code).translate(comic_title)    
+        print(translated_title)
         # Generate panels from the scenario
-        panels = generate_panels(request.scenario, request.template)
+        panels = generate_panels(request.scenario, request.template, user_id, comic_title)
         panels_path = f"{user_id}_comic/{comic_title}/panels"
         json_bytes = BytesIO(json.dumps(panels).encode('utf-8'))
         response = cloudinary.uploader.upload(
@@ -100,6 +115,7 @@ async def generate_comic(request: ComicRequest, user: dict = Depends(verify_toke
         panels = response.json()  # Correct approach to parse JSON
         if isinstance(panels, str):  # Handle edge case where JSON is a string
             panels = json.loads(panels)
+        print("hi", panels)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during setup or panel generation: {str(e)}")
     
@@ -119,7 +135,7 @@ async def generate_comic(request: ComicRequest, user: dict = Depends(verify_toke
         for i, panel in enumerate(panels):
             panel_image = generate_image_with_retry(panel)
             if panel["Text"]:
-                panel_image_with_text = add_text_to_panel(panel["Text"], panel_image)
+                panel_image_with_text = add_text_to_panel(panel["Text"], panel_image, language_code)
             else:
                 panel_image_with_text = panel_image
 
@@ -145,6 +161,8 @@ async def generate_comic(request: ComicRequest, user: dict = Depends(verify_toke
             "images_links": image_links,
             "genre": request.genre,
             "strip_links": strip_links,
+            "language": request.language,
+            "translated_title": translated_title if translated_title else comic_title,
             "created_at": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')  # Custom format
         }
         comics.insert_one(document)

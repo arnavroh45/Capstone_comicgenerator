@@ -15,6 +15,7 @@ class ComicRequest(BaseModel):
     style: str
     template: str
     genre: str
+    language: str
 
 class EditImage(BaseModel):
     prompt: str

@@ -10,8 +10,15 @@ This module provides functions to add text to a comic panel image.
 
 import textwrap
 from PIL import Image, ImageDraw, ImageFont
+import textwrap
+import json
+# from googletrans import Translator
+# translator = Translator()
 
-def add_text_to_panel(text, panel_image):
+from deep_translator import GoogleTranslator
+
+
+def add_text_to_panel(text, panel_image, language_code):
     """
     Adds text to a comic panel image.
 
@@ -22,7 +29,8 @@ def add_text_to_panel(text, panel_image):
     Returns:
         PIL.Image.Image: The resulting image with the text added.
     """
-    text_image = generate_text_image(text)
+
+    text_image = generate_text_image(text, language_code)
 
     result_image = Image.new('RGB', (panel_image.width, panel_image.height + text_image.height))
 
@@ -32,7 +40,7 @@ def add_text_to_panel(text, panel_image):
 
     return result_image
 
-def generate_text_image(text):
+def generate_text_image(text, language):
     """
     Generates an image with the given text.
 
@@ -42,6 +50,10 @@ def generate_text_image(text):
     Returns:
         PIL.Image.Image: The resulting image with the text added.
     """
+    if language != "en":
+        # text = translator.translate(text, lang_tgt=language)
+        text = GoogleTranslator(target=language).translate(text)
+
     # Define image dimensions
     width = 1024
     height = 128
@@ -53,7 +65,7 @@ def generate_text_image(text):
     draw = ImageDraw.Draw(image)
 
     # Choose a font (Pillow's default font)
-    font = ImageFont.truetype(font="manga-temple.ttf", size=30)   
+    font = ImageFont.truetype(font="NotoSans-VariableFont_wdth,wght.ttf", size=30)   
     # Calculate text size
     text_width, text_height, text_length, text_breadth = draw.textbbox([width, height], text=text, font=font)
 
