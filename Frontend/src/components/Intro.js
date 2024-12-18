@@ -7,6 +7,7 @@ import textToImageIcon from '../assets/download (9).jpg';
 import imageToImageIcon from '../assets/download (10).jpg';
 import controlNetIcon from '../assets/download (11).jpg';
 import Footer from './Footer';
+
 const IntroPage = () => {
     const navigate = useNavigate(); // Initialize useNavigate
 
@@ -15,18 +16,17 @@ const IntroPage = () => {
         navigate('/Home'); // Navigate to the sign page
     };
 
-  
-
     return (
         <div className="intro-container">
             <header className="intro-header">
                 <div className="hero-section">
                     <div className="hero-text">
+                        {/* New Title */}
+                        <h1 className="main-title">AI ComicGen</h1> 
                         <h1 className="title">Create Comics with AI!</h1>
                         <p className="subtitle">Unleash your creativity with AI-driven comic generation and design tools.</p>
                         <button className="cta-button" onClick={handleGetStarted}>Get Started</button>
                     </div>
-                    <br></br>
                     <img src={heroImage} alt="AI Comic Hero" className="hero-image" />
                 </div>
             </header>
@@ -41,8 +41,8 @@ const IntroPage = () => {
                         <p>Easily transform your ideas into vibrant comic visuals with our designer.</p>
                     </div>
                     <div className="feature-card">
-                    <img src={textToImageIcon} alt="Text to represent the functionality" className="feature-icon" />
-                    <h3>Text to Image</h3>
+                        <img src={textToImageIcon} alt="Text to represent the functionality" className="feature-icon" />
+                        <h3>Text to Image</h3>
                         <p>Convert your descriptions into stunning comic illustrations with the power of AI.</p>
                     </div>
                     <div className="feature-card">
@@ -57,10 +57,6 @@ const IntroPage = () => {
                     </div>
                 </div>
             </section>
-            <br></br>
-            <br></br><br></br>
-            <br></br><br></br>
-            <br></br><br></br>
             <Footer />
         </div>
     );
