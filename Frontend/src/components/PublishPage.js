@@ -12,6 +12,7 @@ const PublishPage = () => {
   const [message, setMessage] = useState('');
   const [images, setImages] = useState([]); // To store the images from the backend
   const [loading, setLoading] = useState(false);
+  const [lang, setLanguage] = useState('Hindi');
 
   const handlePublish = async (e) => {
     e.preventDefault();
@@ -22,7 +23,7 @@ const PublishPage = () => {
     }
 
     setLoading(true);
-    
+
     try {
       const response = await fetch('http://127.0.0.1:8000/generate_comic/', {
         method: 'POST',
@@ -33,15 +34,39 @@ const PublishPage = () => {
         body: JSON.stringify({
           title,
           genre,
+          lang,
           scenario: description,
-          style: "Epic, dramatic, vibrant, detailed, contrasting, traditional, dynamic, emotional, mythological, intense.",
-          template: "You are a cartoon creator. You will be given a short scenario, you must split it in multiple parts. Try to make it as much detailed as possible.  Each part will be a different cartoon panel. For each cartoon panel, you will write a description of it with: - the characters in the panel, they must be described precisely each time - the background of the panel. The description should be only word or group of word delimited by a comma, no sentence. Always use the characters descriptions instead of their name in the cartoon panel description. Make sure to describe the characters appropriately in the description. You will also write the text of the panel. The text should not be more than 2 small sentences. Each sentence should start by the character name. Example input: Characters: Adrien is a guy with blond hair wearing glasses. Vincent is a guy with black hair wearing a hat. Adrien and vincent want to start a new product, and they create it in one night before presenting it to the board. IMPORTANT NOTE: Strictly stick to the format as mentioned in the example provided, Example output: # Panel 1 description: 2 guys, a blond hair guy wearing glasses, a dark hair guy wearing hat, sitting at the office, with computers text: Vincent: I think Generative AI are the future of the company. Adrien: Let's create a new product with it. # end Short Scenario: {scenario} Split the scenario in multiple parts:",
+          style:
+            'Epic, dramatic, vibrant, detailed, contrasting, traditional, dynamic, emotional, mythological, intense.',
+          template: `You are a cartoon creator. You will be given a short scenario, you must split it in multiple parts. Try to make it as much detailed as possible. Each part will be a different cartoon panel. For each cartoon panel, you will write a description of it with: 
+- the characters in the panel, they must be described precisely each time 
+- the background of the panel.
+
+The description should be only word or group of word delimited by a comma, no sentence. Always use the characters descriptions instead of their name in the cartoon panel description. Make sure to describe the characters appropriately in the description.
+
+You will also write the text of the panel. The text should not be more than 2 small sentences. Each sentence should start by the character name.
+
+Example input:
+Characters: Adrien is a guy with blond hair wearing glasses. Vincent is a guy with black hair wearing a hat. Adrien and vincent want to start a new product, and they create it in one night before presenting it to the board.
+
+Strictly stick to the format as mentioned in the example provided,
+
+Example output:
+# Panel 1
+description: 2 guys, a blond hair guy wearing glasses, a dark hair guy wearing hat, sitting at the office, with computers
+text: Vincent: I think Generative AI are the future of the company.
+Adrien: Let's create a new product with it.
+
+# end 
+
+Short Scenario: {scenario}
+Split the scenario in multiple parts:`,
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        setMessage(`Comic generated successfully!`);
+        setMessage('Comic generated successfully!');
         setImages(data.image_links || []);
       } else {
         const errorData = await response.json();
@@ -65,35 +90,45 @@ const PublishPage = () => {
 
   return (
     <div className="publishpage-container">
-      <header className="publishpage-header" style={{ backgroundImage: `url(${background})` }}>
+      <header
+        className="publishpage-header"
+        style={{ backgroundImage: `url(${background})` }}
+      >
         <div className="publishpage-logo">Comic Gen</div>
-        
+
         {/* Form Container */}
         <div className="publishpage-form-container">
           {/* Input Section */}
           <div className="publishpage-input-section">
             {/* Title Input */}
             <div className="publishpage-input-group">
-              <label htmlFor="title" className="publishpage-input-label">Title:</label>
+              <label htmlFor="title" className="publishpage-input-label">
+                Title:
+              </label>
               <input
                 type="text"
                 id="title"
                 placeholder="Give a Title to your comic"
                 className="publishpage-input-field"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)} 
+                onChange={(e) => setTitle(e.target.value)}
               />
             </div>
 
             {/* Dropdown for Genre */}
             <div className="publishpage-input-group">
-              <label htmlFor="genre" className="publishpage-input-label">Select a genre:</label>
+              <label htmlFor="genre" className="publishpage-input-label">
+                Select a genre:
+              </label>
               <select
                 id="genre"
                 className="publishpage-input-field"
+                value={genre}
                 onChange={(e) => setGenre(e.target.value)}
               >
-                <option value="" disabled selected>-- Select a genre --</option>
+                <option value="" disabled>
+                  -- Select a genre --
+                </option>
                 <option value="Fantasy">Fantasy</option>
                 <option value="Adventure">Adventure</option>
                 <option value="Romance">Romance</option>
@@ -102,11 +137,55 @@ const PublishPage = () => {
                 <option value="Mystery">Mystery</option>
               </select>
             </div>
+            <div className="publishpage-input-group">
+              <label htmlFor="translation" className="publishpage-input-label">
+                Select a language:
+              </label>
+              <select
+                id="translation"
+                className="publishpage-input-field"
+                value={lang}
+                onChange={(e) => setLanguage(e.target.value)}
+              >
+                <option value="hi">Hindi</option>
+    <option value="en">English</option>
+    <option value="es">Spanish</option>
+    <option value="fr">French</option>
+    <option value="de">German</option>
+    <option value="zh-cn">Chinese</option>
+    <option value="ja">Japanese</option>
+    <option value="ko">Korean</option>
+    <option value="ar">Arabic</option>
+    <option value="ru">Russian</option>
+    <option value="it">Italian</option>
+    <option value="pt">Portuguese</option>
+    <option value="bn">Bengali</option>
+    <option value="ta">Tamil</option>
+    <option value="te">Telugu</option>
+    <option value="ur">Urdu</option>
+    <option value="pa">Punjabi</option>
+    <option value="gu">Gujarati</option>
+    <option value="mr">Marathi</option>
+    <option value="ml">Malayalam</option>
+    <option value="th">Thai</option>
+    <option value="el">Greek</option>
+    <option value="nl">Dutch</option>
+    <option value="pl">Polish</option>
+    <option value="tr">Turkish</option>
+    <option value="vi">Vietnamese</option>
+    <option value="fa">Farsi</option>
+    <option value="he">Hebrew</option>
+    <option value="id">Indonesian</option>
+    <option value="sw">Swahili</option>
+              </select>
+            </div>
           </div>
 
           {/* Description Input */}
           <div className="publishpage-description">
-            <label htmlFor="description" className="publishpage-input-label">Description:</label>
+            <label htmlFor="description" className="publishpage-input-label">
+              Description:
+            </label>
             <textarea
               id="description"
               placeholder="Give a brief description of your comic"
@@ -128,25 +207,30 @@ const PublishPage = () => {
         </div>
       </header>
 
+      
       {/* Output Section */}
-      <div className="publishpage-content">
-        <div className="publishpage-output-section">
-          {message && <p className="publishpage-message">{message}</p>}
-          {images.length > 0 && (
-            <Slider {...settings}>
-              {images.map((image, index) => (
-                <div key={index} className="carousel-slide">
-                  <img 
-                    src={image} 
-                    alt={`Comic Panel ${index + 1}`} 
-                    className="carousel-image"
-                  />
-                </div>
-              ))}
-            </Slider>
-          )}
-        </div>
-      </div>
+<div className="publishpage-content">
+  <div className="publishpage-output-section">
+    <div className="publishpage-output-placeholder">
+      {images.length > 0 ? (
+        <Slider {...settings}>
+          {images.map((image, index) => (
+            <div key={index} className="carousel-slide">
+              <img
+                src={image}
+                alt={`Comic Panel ${index + 1}`}
+                className="carousel-image"
+              />
+            </div>
+          ))}
+        </Slider>
+      ) : (
+        <p className="placeholder-text">Your comic panels will appear here.</p>
+      )}
+    </div>
+  </div>
+</div>
+
     </div>
   );
 };
