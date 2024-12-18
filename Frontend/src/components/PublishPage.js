@@ -12,7 +12,7 @@ const PublishPage = () => {
   const [message, setMessage] = useState('');
   const [images, setImages] = useState([]); // To store the images from the backend
   const [loading, setLoading] = useState(false);
-  const [lang, setLanguage] = useState('Hindi');
+  const [language, setLanguage] = useState('English');
 
   const handlePublish = async (e) => {
     e.preventDefault();
@@ -34,7 +34,7 @@ const PublishPage = () => {
         body: JSON.stringify({
           title,
           genre,
-          lang,
+          language,
           scenario: description,
           style:
             'Epic, dramatic, vibrant, detailed, contrasting, traditional, dynamic, emotional, mythological, intense.',
@@ -78,7 +78,7 @@ Split the scenario in multiple parts:`,
       setLoading(false);
     }
   };
-
+console.log(language)
   // Carousel settings for react-slick
   const settings = {
     dots: true,
@@ -144,39 +144,39 @@ Split the scenario in multiple parts:`,
               <select
                 id="translation"
                 className="publishpage-input-field"
-                value={lang}
+                value={language}
                 onChange={(e) => setLanguage(e.target.value)}
               >
-                <option value="hi">Hindi</option>
-    <option value="en">English</option>
-    <option value="es">Spanish</option>
-    <option value="fr">French</option>
-    <option value="de">German</option>
-    <option value="zh-cn">Chinese</option>
-    <option value="ja">Japanese</option>
-    <option value="ko">Korean</option>
-    <option value="ar">Arabic</option>
-    <option value="ru">Russian</option>
-    <option value="it">Italian</option>
-    <option value="pt">Portuguese</option>
-    <option value="bn">Bengali</option>
-    <option value="ta">Tamil</option>
-    <option value="te">Telugu</option>
-    <option value="ur">Urdu</option>
-    <option value="pa">Punjabi</option>
-    <option value="gu">Gujarati</option>
-    <option value="mr">Marathi</option>
-    <option value="ml">Malayalam</option>
-    <option value="th">Thai</option>
-    <option value="el">Greek</option>
-    <option value="nl">Dutch</option>
-    <option value="pl">Polish</option>
-    <option value="tr">Turkish</option>
-    <option value="vi">Vietnamese</option>
-    <option value="fa">Farsi</option>
-    <option value="he">Hebrew</option>
-    <option value="id">Indonesian</option>
-    <option value="sw">Swahili</option>
+                <option value="Hindi">Hindi</option>
+    <option value="English">English</option>
+    <option value="Spanish">Spanish</option>
+    <option value="French">French</option>
+    <option value="German">German</option>
+    <option value="Chinese">Chinese</option>
+    <option value="Japanese">Japanese</option>
+    <option value="Korean">Korean</option>
+    <option value="Arabic">Arabic</option>
+    <option value="Russian">Russian</option>
+    <option value="Italian">Italian</option>
+    <option value="Portuguese">Portuguese</option>
+    <option value="Bengali">Bengali</option>
+    <option value="Tamil">Tamil</option>
+    <option value="Telugu">Telugu</option>
+    <option value="Urdu">Urdu</option>
+    <option value="Punjabi">Punjabi</option>
+    <option value="Gujarati">Gujarati</option>
+    <option value="Marathi">Marathi</option>
+    <option value="Malayalam">Malayalam</option>
+    <option value="Thai">Thai</option>
+    <option value="Greek">Greek</option>
+    <option value="Dutch">Dutch</option>
+    <option value="Polish">Polish</option>
+    <option value="Turkish">Turkish</option>
+    <option value="Vietnamese">Vietnamese</option>
+    <option value="Farsi">Farsi</option>
+    <option value="Hebrew">Hebrew</option>
+    <option value="Indonesian">Indonesian</option>
+    <option value="Swahili">Swahili</option>
               </select>
             </div>
           </div>

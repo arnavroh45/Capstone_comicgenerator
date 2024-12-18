@@ -95,8 +95,7 @@ async def generate_comic(request: ComicRequest, user: dict = Depends(verify_toke
         comic_title = request.title
         if language_code != "en":
             # translated_title = translator.translate(comic_title, lang_tgt=language_code)
-            translated_title = GoogleTranslator(target=language_code).translate(comic_title)    
-        print(translated_title)
+            translated_title = GoogleTranslator(target=language_code).translate(comic_title)
         # Generate panels from the scenario
         panels = generate_panels(request.scenario, request.template, user_id, comic_title)
         panels_path = f"{user_id}_comic/{comic_title}/panels"
