@@ -34,8 +34,8 @@ app.get("/user_profile", async (req, res) => {
     res.status(200).send({ totalVotes ,uname,eid});
   } catch (error) {
     console.error(error);
-    res.status(500).send({ message: "Internal Server Error" });
-  }
+    res.status(500).send({ message: "Internal Server Error"});
+}
 });
 
 const cookieParser = require('cookie-parser');

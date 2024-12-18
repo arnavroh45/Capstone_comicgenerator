@@ -4,6 +4,7 @@ import './PublishPage.css';
 import 'slick-carousel/slick/slick.css'; // Import slick-carousel styles
 import 'slick-carousel/slick/slick-theme.css';
 import background from '../assets/background.png';
+import ImageCarousel from './ImageCar';
 
 const PublishPage = () => {
   const [title, setTitle] = useState('');
@@ -66,6 +67,7 @@ Split the scenario in multiple parts:`,
 
       if (response.ok) {
         const data = await response.json();
+        console.log(data.image_links);
         setMessage('Comic generated successfully!');
         setImages(data.image_links || []);
       } else {
@@ -78,14 +80,34 @@ Split the scenario in multiple parts:`,
       setLoading(false);
     }
   };
-console.log(language)
+const images1 = [
+  "http://res.cloudinary.com/dfntvlmqc/image/upload/v1734541422/Arnavasharma4_be21%40thapar.edu_comic/monkey%20eating%20bananas/panel_1.png",
+  "http://res.cloudinary.com/dfntvlmqc/image/upload/v1734541486/Arnavasharma4_be21%40thapar.edu_comic/monkey%20eating%20bananas/panel_2.png",
+  "http://res.cloudinary.com/dfntvlmqc/image/upload/v1734541518/Arnavasharma4_be21%40thapar.edu_comic/monkey%20eating%20bananas/panel_3.png",
+  "http://res.cloudinary.com/dfntvlmqc/image/upload/v1734541538/Arnavasharma4_be21%40thapar.edu_comic/monkey%20eating%20bananas/panel_4.png"
+]
   // Carousel settings for react-slick
   const settings = {
-    dots: false,
-    infinite: true,
+    dots: true,
+    infinite: false, // Changed from true to false
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    adaptiveHeight: true, // Helps with varying image sizes
+    arrows: true, // Add navigation arrows
+    centerMode: false, // Ensure full image display
+    accessibility: true, // Improve keyboard navigation
+    draggable: true, // Allow mouse/touch dragging
+    swipeToSlide: true, // Enable swiping
+    responsive: [
+      {
+        breakpoint: 768, // Mobile breakpoint
+        settings: {
+          dots: true,
+          arrows: false // Hide arrows on smaller screens
+        }
+      }
+    ]
   };
 
   return (
@@ -148,35 +170,35 @@ console.log(language)
                 onChange={(e) => setLanguage(e.target.value)}
               >
                 <option value="Hindi">Hindi</option>
-    <option value="English">English</option>
-    <option value="Spanish">Spanish</option>
-    <option value="French">French</option>
-    <option value="German">German</option>
-    <option value="Chinese">Chinese</option>
-    <option value="Japanese">Japanese</option>
-    <option value="Korean">Korean</option>
-    <option value="Arabic">Arabic</option>
-    <option value="Russian">Russian</option>
-    <option value="Italian">Italian</option>
-    <option value="Portuguese">Portuguese</option>
-    <option value="Bengali">Bengali</option>
-    <option value="Tamil">Tamil</option>
-    <option value="Telugu">Telugu</option>
-    <option value="Urdu">Urdu</option>
-    <option value="Punjabi">Punjabi</option>
-    <option value="Gujarati">Gujarati</option>
-    <option value="Marathi">Marathi</option>
-    <option value="Malayalam">Malayalam</option>
-    <option value="Thai">Thai</option>
-    <option value="Greek">Greek</option>
-    <option value="Dutch">Dutch</option>
-    <option value="Polish">Polish</option>
-    <option value="Turkish">Turkish</option>
-    <option value="Vietnamese">Vietnamese</option>
-    <option value="Farsi">Farsi</option>
-    <option value="Hebrew">Hebrew</option>
-    <option value="Indonesian">Indonesian</option>
-    <option value="Swahili">Swahili</option>
+                <option value="English">English</option>
+                <option value="Spanish">Spanish</option>
+                <option value="French">French</option>
+                <option value="German">German</option>
+                <option value="Chinese">Chinese</option>
+                <option value="Japanese">Japanese</option>
+                <option value="Korean">Korean</option>
+                <option value="Arabic">Arabic</option>
+                <option value="Russian">Russian</option>
+                <option value="Italian">Italian</option>
+                <option value="Portuguese">Portuguese</option>
+                <option value="Bengali">Bengali</option>
+                <option value="Tamil">Tamil</option>
+                <option value="Telugu">Telugu</option>
+                <option value="Urdu">Urdu</option>
+                <option value="Punjabi">Punjabi</option>
+                <option value="Gujarati">Gujarati</option>
+                <option value="Marathi">Marathi</option>
+                <option value="Malayalam">Malayalam</option>
+                <option value="Thai">Thai</option>
+                <option value="Greek">Greek</option>
+                <option value="Dutch">Dutch</option>
+                <option value="Polish">Polish</option>
+                <option value="Turkish">Turkish</option>
+                <option value="Vietnamese">Vietnamese</option>
+                <option value="Farsi">Farsi</option>
+                <option value="Hebrew">Hebrew</option>
+                <option value="Indonesian">Indonesian</option>
+                <option value="Swahili">Swahili</option>
               </select>
             </div>
           </div>
@@ -207,29 +229,35 @@ console.log(language)
         </div>
       </header>
 
-      
+
       {/* Output Section */}
-<div className="publishpage-content">
-  <div className="publishpage-output-section">
-    <div className="publishpage-output-placeholder">
-      {images.length > 0 ? (
-        <Slider {...settings}>
-          {images.map((image, index) => (
-            <div key={index} className="carousel-slide">
-              <img
-                src={image}
-                alt={`Comic Panel ${index + 1}`}
-                className="carousel-image"
-              />
-            </div>
-          ))}
-        </Slider>
-      ) : (
-        <p className="placeholder-text">Your comic panels will appear here.</p>
-      )}
-    </div>
-  </div>
-</div>
+      <div className="publishpage-content">
+        <div className="publishpage-output-section">
+          <div className="publishpage-output-placeholder">
+
+            {images.length > 0 ? (
+               <ImageCarousel images={images} />
+              // <Slider {...settings}>
+              //   {images1.map((image, index) => (
+              //     <div key={index} className="carousel-slide">
+              //       <img
+              //         src={image}
+              //         alt={`Comic Panel ${index + 1}`}
+              //         className="carousel-image"
+              //         style={{ 
+              //           maxWidth: '100%', 
+              //           maxHeight: '500px', 
+              //         }}
+              //       />
+              //     </div>
+              //   ))}
+              // </Slider>
+            ) : (
+              <p className="placeholder-text">Your comic panels will appear here.</p>
+            )}
+          </div>
+        </div>
+      </div>
 
     </div>
   );

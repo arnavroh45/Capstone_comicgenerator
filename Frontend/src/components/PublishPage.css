@@ -39,7 +39,15 @@
     align-self: flex-start;
     margin-bottom: 10px;
   }
+  .comic-slider .slick-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   
+  .comic-slider .slick-dots {
+    bottom: -25px; /* Adjust dot positioning if needed */
+  }
   .publishpage-input-section {
     display: flex;
     flex-direction: row; /* Arrange inputs side by side */
