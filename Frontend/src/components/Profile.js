@@ -69,8 +69,8 @@ const ProfilePage = () => {
                 <h1 style={{ textAlign: 'center' }}>User Profile</h1>
                 {userProfile ? (
                     <div>
-                        <p><strong>Name:</strong> {userProfile.name}</p>
-                        <p><strong>Email:</strong> {userProfile.email}</p>
+                        <p><strong>Name:</strong> {userProfile.uname}</p>
+                        <p><strong>Email:</strong> {userProfile.eid}</p>
                         <p><strong>TotalVotes:</strong> {userProfile.totalVotes}</p>
                         {/* Add other relevant user details here */}
                     </div>
