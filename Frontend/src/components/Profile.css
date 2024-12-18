@@ -1,0 +1,81 @@
+.profile-page {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+  }
+  
+  .profile-left-panel {
+    flex: 1;
+    max-width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    text-align: center;
+  }
+  
+  .profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+  }
+  
+  .profile-username {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .profile-total-votes {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .profile-right-panel {
+    flex: 3;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+  
+  .profile-right-panel h2 {
+    margin-bottom: 1rem;
+  }
+  
+  .comics-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .comic-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .comic-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .comic-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .comic-info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .comic-info p {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  

@@ -7,7 +7,7 @@ function DashboardPage() {
   const navigate = useNavigate();
 
   const handlePublishClick = () => navigate("/publish");
-  const handleVoteNowClick = () => navigate('/community'); 
+  const handleVoteNowClick = () => navigate('/community');
   const fetchTotalVotes = async () => {
     try {
       const response = await fetch("http://localhost:3000/getvote", {
@@ -21,8 +21,8 @@ function DashboardPage() {
       if (!response.ok) {
         throw new Error("Failed to fetch votes");
       }
-      const data = await response.json(); 
-      alert(`Your total Votes:${data.totalVotes}`);
+      const data = await response.json();
+      alert(`Your total Votes: ${data.totalVotes}`);
     } catch (error) {
       console.error("Error fetching total votes:", error);
       alert("Error fetching total votes. Please try again.");
@@ -82,7 +82,6 @@ function DashboardPage() {
         <nav className="navigation">
           <a href="/">Home</a>
           <a href="/user_comics">Comics</a>
-          <a href="/novels">Novels</a>
           <a href="/community">Community</a>
           <a href="/liked">Liked</a>
           <a href="/popular">Popular</a>
@@ -91,14 +90,18 @@ function DashboardPage() {
           <button className="btn-publish" onClick={handlePublishClick}>
             Publish
           </button>
-          <div className="user-dropdown">
-          <span className="user-icon">👨‍💼</span> 
-          <div className="dropdown-content">
-            <a href="/user_comics">User Comics</a>
-            <br></br>
-            <button style={{marginTop:"0px",marginLeft:"4px"}} type="submit" className="btn-publish" onClick={fetchTotalVotes}>Total Votes</button>
-          </div>
-        </div>
+          {/* Profile Icon */}
+          <span
+            className="user-icon"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("/profile")}
+          >
+             <img 
+              src="../assets/user.png" 
+              alt="User Profile"
+              className="user-profile-image"
+            />
+          </span>
         </nav>
       </header>
 
@@ -125,14 +128,14 @@ function DashboardPage() {
 
           </div>
           <div className="dots-navigation">
-      {carouselItems.map((_, index) => (
-        <span
-          key={index}
-          className={`dot ${index === currentIndex ? "active" : ""}`}
-          onClick={() => setCurrentIndex(index)}
-        ></span>
-      ))}
-    </div>
+            {carouselItems.map((_, index) => (
+              <span
+                key={index}
+                className={`dot ${index === currentIndex ? "active" : ""}`}
+                onClick={() => setCurrentIndex(index)}
+              ></span>
+            ))}
+          </div>
         </div>
       </div>
 

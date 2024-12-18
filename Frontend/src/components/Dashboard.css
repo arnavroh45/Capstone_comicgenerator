@@ -51,12 +51,24 @@ body {
   margin-left: 10px; /* Adjust spacing */
 }
 
+.user-profile-image {
+  width: 16px; /* Adjust size as needed */
+  height: 16px;
+  border-radius: 50%; /* Makes the image circular */
+  object-fit: cover; /* Ensures the image is properly cropped */
+  transition: transform 0.3s ease; /* Adds hover animation */
+}
+
+.user-profile-image:hover {
+  transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
 /* User Icon Styling */
 .user-icon {
   cursor: pointer;
-  font-size: 18px; /* Adjust icon size */
+  font-size: 8px; /* Adjust icon size */
   color: #ffffff; /* Icon color */
-  padding: 5px 10px;
+  padding: 8px 10px;
   border-radius: 50%;
   background-color: #333; /* Optional background for visibility */
 }
