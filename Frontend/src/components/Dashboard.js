@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 import Footer from "./Footer";
+import userIcon from "../assets/user.svg";
+
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -97,7 +99,7 @@ function DashboardPage() {
             onClick={() => navigate("/profile")}
           >
              <img 
-              src="../assets/user.png" 
+              src={userIcon} 
               alt="User Profile"
               className="user-profile-image"
             />
