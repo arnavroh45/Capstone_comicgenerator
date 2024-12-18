@@ -81,7 +81,7 @@ Split the scenario in multiple parts:`,
 console.log(language)
   // Carousel settings for react-slick
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,

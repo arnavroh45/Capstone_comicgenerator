@@ -11,6 +11,33 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({credentials:true}));
 let db;
 
+app.get("/user_profile", async (req, res) => { 
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader) {
+    return res.status(401).send({ message: "Authorization header missing" });
+  }
+
+  const token = authHeader.split(" ")[1];
+  try {
+    const uname = jwt.decode(token).name;
+    const eid = jwt.decode(token).email;
+    const comicId = uname + eid;
+    
+    const result = await db.collection("Comics")
+      .aggregate([
+        { $match: { user_id: comicId } }, 
+        { $group: { _id: null, totalVotes: { $sum: "$vote" } } }, 
+      ])
+      .toArray();
+    const totalVotes = result.length > 0 ? result[0].totalVotes : 0;
+    res.status(200).send({ totalVotes ,uname,eid});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 connectToDb((err) => {

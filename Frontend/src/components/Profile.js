@@ -71,7 +71,7 @@ const ProfilePage = () => {
                     <div>
                         <p><strong>Name:</strong> {userProfile.name}</p>
                         <p><strong>Email:</strong> {userProfile.email}</p>
-                        <p><strong>Bio:</strong> {userProfile.bio || 'No bio provided.'}</p>
+                        <p><strong>TotalVotes:</strong> {userProfile.totalVotes}</p>
                         {/* Add other relevant user details here */}
                     </div>
                 ) : (
